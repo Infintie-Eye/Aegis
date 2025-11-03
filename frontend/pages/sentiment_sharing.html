@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotional & Mental Quotient Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@700&family=Pacifico&family=Righteous&family=ZCOOL+QingKe+HuangYou&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Righteous', cursive;
+            overflow-x: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Rainbow animated background */
+        .rainbow-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            background-size: 1400% 1400%;
+            animation: rainbow 15s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 82%; }
+            50% { background-position: 100% 19%; }
+            100% { background-position: 0% 82%; }
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 5px 15px;
+            border-radius: 10px;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .nav-item i {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-item span {
+            font-size: 0.9rem;
+            font-family: 'Righteous', cursive;
+        }
+
+        .emergency {
+            color: #ff4d4d;
+        }
+
+        /* Container for all content */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 100px; /* Added padding to account for navbar */
+        }
+
+        /* Top section with emojis */
+        .emoji-section {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            width: 100%;
+            height: 100px;
+        }
+
+        .emoji {
+            font-size: 3rem;
+            margin: 0 10px;
+            animation: bounce 2s infinite alternate;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .emoji:nth-child(1) { animation-delay: 0.2s; }
+        .emoji:nth-child(2) { animation-delay: 0.4s; }
+        .emoji:nth-child(3) { animation-delay: 0.6s; }
+        .emoji:nth-child(4) { animation-delay: 0.8s; }
+        .emoji:nth-child(5) { animation-delay: 1.0s; }
+        .emoji:nth-child(6) { animation-delay: 1.2s; }
+        .emoji:nth-child(7) { animation-delay: 1.4s; }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-30px);
+                opacity: 1;
+            }
+        }
+
+        /* Heading */
+        .heading {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 4rem;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            margin: 20px 0;
+            animation: popInOut 3s infinite;
+        }
+
+        @keyframes popInOut {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        /* Questions section */
+        .questions-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin: 30px 0;
+        }
+
+        .question {
+            font-size: 2rem;
+            margin: 15px 0;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            opacity: 0;
+            animation: bounceDown 1.5s forwards;
+        }
+
+        .question:nth-child(1) {
+            font-family: 'Dancing Script', cursive;
+            animation-delay: 0.5s;
+        }
+
+        .question:nth-child(2) {
+            font-family: 'Pacifico', cursive;
+            animation-delay: 1.5s;
+        }
+
+        .question:nth-child(3) {
+            font-family: 'ZCOOL QingKe HuangYou', cursive;
+            animation-delay: 2.5s;
+        }
+
+        @keyframes bounceDown {
+            0% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            60% {
+                transform: translateY(20px);
+                opacity: 1;
+            }
+            80% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Button section */
+        .button-section {
+            margin: 40px 0;
+        }
+
+        .magic-button {
+            background: linear-gradient(45deg, #ff00cc, #3333ff);
+            border: none;
+            border-radius: 50px;
+            padding: 20px 40px;
+            font-size: 1.8rem;
+            font-family: 'Righteous', cursive;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.6);
+            }
+        }
+
+        .magic-button:hover {
+            transform: scale(1.05);
+        }
+
+        .magic-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .magic-button:hover::before {
+            left: 100%;
+        }
+
+        .button-text {
+            animation: reelText 3s infinite;
+        }
+
+        @keyframes reelText {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px 0;
+            }
+            
+            .nav-item i {
+                font-size: 1.4rem;
+            }
+            
+            .nav-item span {
+                font-size: 0.7rem;
+            }
+            
+            .container {
+                padding-top: 80px;
+            }
+            
+            .heading {
+                font-size: 2.5rem;
+            }
+            
+            .question {
+                font-size: 1.5rem;
+            }
+            
+            .magic-button {
+                font-size: 1.4rem;
+                padding: 15px 30px;
+            }
+            
+            .emoji {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="rainbow-bg"></div>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="#" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-robot"></i>
+            <span>AI Companion</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-users"></i>
+            <span>Community</span>
+        </a>
+        <a href="#" class="nav-item emergency">
+            <i class="fas fa-phone-alt"></i>
+            <span>Emergency</span>
+        </a>
+    </nav>
+    
+    <div class="container">
+        <!-- Top section with emojis -->
+        <div class="emoji-section">
+            <div class="emoji">😀</div>
+            <div class="emoji">😢</div>
+            <div class="emoji">😡</div>
+            <div class="emoji">😍</div>
+            <div class="emoji">🤔</div>
+            <div class="emoji">😱</div>
+            <div class="emoji">😎</div>
+        </div>
+        
+        <!-- Heading -->
+        <h1 class="heading">Do you feel too much or too little?</h1>
+        
+        <!-- Questions section -->
+        <div class="questions-section">
+            <div class="question">Lets know why u feel the way you feel</div>
+            <div class="question">How emotionally intelligent you are?</div>
+            <div class="question">What is your unique mental level</div>
+        </div>
+        
+        <!-- Button section -->
+        <div class="button-section">
+            <button class="magic-button" id="startButton">
+                <span class="button-text">Let The Magic Begin</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startButton = document.getElementById('startButton');
+            
+            startButton.addEventListener('click', function() {
+                // In a real application, this would navigate to the assessment
+                // For now, we'll just show an alert
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                modal.style.display = 'flex';
+                modal.style.justifyContent = 'center';
+                modal.style.alignItems = 'center';
+                modal.style.zIndex = '1000';
+                
+                const modalContent = document.createElement('div');
+                modalContent.style.backgroundColor = 'white';
+                modalContent.style.padding = '30px';
+                modalContent.style.borderRadius = '15px';
+                modalContent.style.textAlign = 'center';
+                modalContent.style.maxWidth = '500px';
+                
+                const title = document.createElement('h2');
+                title.textContent = 'Welcome to Your Journey!';
+                title.style.marginBottom = '20px';
+                title.style.color = '#333';
+                
+                const message = document.createElement('p');
+                message.textContent = 'This is where your emotional and mental quotient assessment would begin. Get ready to explore the depths of your emotions and intelligence!';
+                message.style.marginBottom = '25px';
+                message.style.color = '#555';
+                
+                const closeButton = document.createElement('button');
+                closeButton.textContent = 'Got it!';
+                closeButton.style.padding = '10px 20px';
+                closeButton.style.backgroundColor = '#4CAF50';
+                closeButton.style.color = 'white';
+                closeButton.style.border = 'none';
+                closeButton.style.borderRadius = '5px';
+                closeButton.style.cursor = 'pointer';
+                closeButton.style.fontSize = '16px';
+                
+                closeButton.addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+                
+                modalContent.appendChild(title);
+                modalContent.appendChild(message);
+                modalContent.appendChild(closeButton);
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+            });
+        });
+    </script>
+</body>
+</html>

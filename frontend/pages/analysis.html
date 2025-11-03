@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegis Moodometer - Redesigned</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Quicksand:wght@500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: #2d3561;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* 3D Background */
+        .bg-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        
+        .bg-3d-layer {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            top: -10%;
+            left: -10%;
+            background: linear-gradient(135deg, #e0f7fa, #bbdefb, #e1bee7, #d1c4e9);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            transform-style: preserve-3d;
+        }
+        
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.6;
+            filter: blur(40px);
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .shape1 {
+            width: 300px;
+            height: 300px;
+            background: #80d8ff;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        
+        .shape2 {
+            width: 200px;
+            height: 200px;
+            background: #b388ff;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        .shape3 {
+            width: 250px;
+            height: 250px;
+            background: #ea80fc;
+            bottom: 10%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+        
+        .shape4 {
+            width: 180px;
+            height: 180px;
+            background: #8c9eff;
+            top: 30%;
+            right: 30%;
+            animation-delay: 6s;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, -20px) rotate(5deg); }
+            50% { transform: translate(-20px, 10px) rotate(-5deg); }
+            75% { transform: translate(10px, 20px) rotate(3deg); }
+        }
+        
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 2rem;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            position: relative;
+            z-index: 10;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .navbar h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-align: center;
+            color: #9c6ade;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .navbar h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #5c6bc0, #7986cb, #5c6bc0);
+            border-radius: 3px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Bouncing Text */
+        .bouncing-text {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #3f51b5;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
+            animation: bounce 2s infinite;
+            position: relative;
+        }
+        
+        .bouncing-text::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #7986cb, #5c6bc0, #3f51b5);
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(8px);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* Moodometer Container */
+        .moodometer-container {
+            position: relative;
+            width: 150px;
+            height: 80px;
+            margin: 0 auto 3rem;
+            perspective: 1000px;
+        }
+        
+        /* Moodometer */
+        .moodometer {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 175px 175px 0 0;
+            box-shadow: 0 15px 35px rgba(31, 38, 135, 0.2);
+            transform-style: preserve-3d;
+            transform: rotateX(10deg);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Moodometer Colors */
+        .mood-color {
+            position: absolute;
+            width: 16.66%;
+            height: 100%;
+            transform-origin: bottom center;
+            transition: all 0.3s ease;
+        }
+        
+        .mood-color:hover {
+            transform: scaleY(1.05);
+            filter: brightness(1.1);
+        }
+        
+        .color-violet {
+            left: 0;
+            background: linear-gradient(to top, #7e57c2, #9575cd);
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .color-blue {
+            left: 16.66%;
+            background: linear-gradient(to top, #42a5f5, #64b5f6);
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .color-green {
+            left: 33.33%;
+            background: linear-gradient(to top, #66bb6a, #81c784);
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .color-yellow {
+            left: 50%;
+            background: linear-gradient(to top, #ffee58, #fff176);
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .color-orange {
+            left: 66.66%;
+            background: linear-gradient(to top, #ffa726, #ffb74d);
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .color-red {
+            left: 83.33%;
+            background: linear-gradient(to top, #ef5350, #ef9a9a);
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Needle */
+        .needle-container {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 40px;
+            z-index: 10;
+            transform-origin: bottom center;
+            transition: transform 1. cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .needle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 80px;
+            background: linear-gradient(to top, #3f51b5, #5c6bc0);
+            border-radius: 6px 6px 0 0;
+            box-shadow: 0 0 15px rgba(63, 81, 181, 0.7);
+        }
+        
+        .needle::before {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            border: 3px solid #5c6bc0;
+        }
+        
+        /* Controls */
+        .controls {
+            margin-top: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            max-width: 400px;
+        }
+        
+        .mood-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(92, 107, 192, 0.3);
+            color: #3f51b5;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(31, 38, 135, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .mood-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #5c6bc0, #7986cb);
+            z-index: -1;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+        
+        .mood-btn:hover {
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(63, 81, 181, 0.3);
+        }
+        
+        .mood-btn:hover::before {
+            opacity: 1;
+        }
+        
+        /* Three Small Divs */
+        .three-divs-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 4rem;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        
+        .small-div {
+            width: 220px;
+            height: 130px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid rgba(92, 107, 192, 0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 15px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #3f51b5;
+            box-shadow: 0 10px 30px rgba(31, 38, 135, 0.15);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .small-div::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #5c6bc0, #7986cb);
+            z-index: -1;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(100%);
+        }
+        
+        .small-div:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 15px 35px rgba(63, 81, 181, 0.3);
+            color: white;
+        }
+        
+        .small-div:hover::before {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+            box-shadow: 0 -8px 32px rgba(31, 38, 135, 0.15);
+            position: relative;
+            z-index: 10;
+            border-top: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .footer-icons {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 10px;
+            border-radius: 15px;
+        }
+        
+        .icon-container:hover {
+            transform: translateY(-8px);
+            background: rgba(92, 107, 192, 0.1);
+        }
+        
+        .icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #5c6bc0, #7986cb);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 20px rgba(63, 81, 181, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            border-radius: 50%;
+            transition: all 0.5s ease;
+        }
+        
+        .icon-container:hover .icon::before {
+            transform: scale(1);
+        }
+        
+        .icon-container:hover .icon {
+            box-shadow: 0 12px 25px rgba(63, 81, 181, 0.5);
+            transform: rotate(10deg);
+        }
+        
+        .icon svg {
+            width: 30px;
+            height: 30px;
+            fill: #ffffff;
+            z-index: 1;
+            position: relative;
+        }
+        
+        .icon-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: #3f51b5;
+            font-weight: 600;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar h1 {
+                font-size: 1.8rem;
+            }
+            
+            .bouncing-text {
+                font-size: 2rem;
+            }
+            
+            .moodometer-container {
+                width: 280px;
+                height: 140px;
+            }
+            
+            .needle {
+                height: 100px;
+            }
+            
+            .three-divs-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .small-div {
+                width: 220px;
+                height: 120px;
+            }
+            
+            .footer-icons {
+                gap: 2rem;
+            }
+            
+            .icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .icon svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .navbar h1 {
+                font-size: 1.5rem;
+            }
+            
+            .bouncing-text {
+                font-size: 1.7rem;
+            }
+            
+            .moodometer-container {
+                width: 240px;
+                height: 120px;
+            }
+            
+            .needle {
+                height: 80px;
+            }
+            
+            .controls {
+                gap: 0.8rem;
+            }
+            
+            .mood-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            
+            .small-div {
+                width: 200px;
+                height: 110px;
+                font-size: 1rem;
+            }
+            
+            .footer-icons {
+                gap: 1.5rem;
+            }
+            
+            .icon {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .icon svg {
+                width: 22px;
+                height: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Background -->
+    <div class="bg-3d">
+        <div class="bg-3d-layer"></div>
+        <div class="floating-shape shape1"></div>
+        <div class="floating-shape shape2"></div>
+        <div class="floating-shape shape3"></div>
+        <div class="floating-shape shape4"></div>
+    </div>
+    
+    <nav class="navbar">
+        <h1>Aegis Welcomes you</h1>
+    </nav>
+    
+    <main class="main-content">
+        <h2 class="bouncing-text">How are YOU?</h2>
+        
+        <div class="moodometer-container">
+            <div class="moodometer">
+                <div class="mood-color color-violet"></div>
+                <div class="mood-color color-blue"></div>
+                <div class="mood-color color-green"></div>
+                <div class="mood-color color-yellow"></div>
+                <div class="mood-color color-orange"></div>
+                <div class="mood-color color-red"></div>
+            </div>
+            <div class="needle-container" id="needle">
+                <div class="needle"></div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="mood-btn" onclick="setMood(0)">Very Sad</button>
+            <button class="mood-btn" onclick="setMood(1)">Sad</button>
+            <button class="mood-btn" onclick="setMood(2)">Neutral</button>
+            <button class="mood-btn" onclick="setMood(3)">Happy</button>
+            <button class="mood-btn" onclick="setMood(4)">Very Happy</button>
+            <button class="mood-btn" onclick="setMood(5)">Ecstatic</button>
+        </div>
+        
+        <div class="three-divs-container">
+            <div class="small-div">Personality Trivia</div>
+            <div class="small-div">Your Emotional and mental quotient</div>
+            <div class="small-div">Get up closer to U</div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="footer-icons">
+            <div class="icon-container">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+                <span class="icon-label">Profile</span>
+            </div>
+            <div class="icon-container">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                    </svg>
+                </div>
+                <span class="icon-label">AI Chatbot</span>
+            </div>
+            <div class="icon-container">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                </div>
+                <span class="icon-label">Community</span>
+            </div>
+            <div class="icon-container">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>
+                    </svg>
+                </div>
+                <span class="icon-label">Emergency</span>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        function setMood(moodLevel) {
+            const needle = document.getElementById('needle');
+            // Calculate rotation angle (from -90deg to 90deg)
+            const rotation = -90 + (moodLevel * 30);
+            needle.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
+            
+            // Add a pulse effect to the moodometer
+            const moodometer = document.querySelector('.moodometer');
+            moodometer.style.animation = 'pulse 0.5s';
+            setTimeout(() => {
+                moodometer.style.animation = '';
+            }, 500);
+        }
+        
+        // Set initial mood to neutral
+        setMood(2);
+        
+        // Add pulse animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: rotateX(10deg) scale(1); }
+                50% { transform: rotateX(10deg) scale(1.05); }
+                100% { transform: rotateX(10deg) scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
