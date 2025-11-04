@@ -24,6 +24,11 @@
             --transition: all 0.4s ease;
         }
 
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
         body {
             background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #d4fc79, #96e6a1);
             background-size: 400% 400%;
@@ -403,15 +408,15 @@
     <nav class="navbar">
         <div class="nav-item">
             <i class="fas fa-home"></i>
-            <span>Home</span>
+            <span><a href="dashboard.html">Dashboard</a></span>
         </div>
         <div class="nav-item">
             <i class="fas fa-robot"></i>
-            <span>AI Companion</span>
+            <span><a href="aichatbot.html">AI Companion</a></span>
         </div>
         <div class="nav-item active">
             <i class="fas fa-users"></i>
-            <span>Community</span>
+            <span><a href="community_list.html">Community</a></span>
             <div class="notification-badge">3</div>
         </div>
         <div class="nav-item">
@@ -419,6 +424,7 @@
             <span>Profile</span>
         </div>
     </nav>
+    
 
     <!-- Main Content -->
     <main class="main-content">
