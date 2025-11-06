@@ -290,7 +290,7 @@ loginForm.addEventListener("submit", async (e) => {
     await signInWithEmailAndPassword(auth, email, password);
     showNotification("Login successful! Redirecting...", "success");
     setTimeout(() => {
-      window.location.href = "/pages/newdash.html";
+      window.location.href = "/pages/userdashboard.html";
     }, 1500);
   } catch (err) {
     showNotification(err.message, "error");

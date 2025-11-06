@@ -247,7 +247,7 @@
       await user.reload(); // refresh user info
       if (user.emailVerified) {
         // ✅ Redirect once verified
-        window.location.href = "/pages/newdash.html";
+        window.location.href = "/pages/userdashboard.html";
       }
     } else {
       // If user is missing (not logged in), send them back to sign-up
