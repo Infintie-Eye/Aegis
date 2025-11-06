@@ -97,12 +97,12 @@
         }
 
         .logo h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 700;
         }
 
         .tagline {
-            font-size: 1.8rem;
+            font-size: 1.1rem;
             margin-bottom: 30px;
             opacity: 0.9;
         }
@@ -115,7 +115,7 @@
             display: flex;
             align-items: center;
             margin-bottom: 15px;
-            font-size: 1.3rem;
+            font-size: 1rem;
         }
 
         .features i {
@@ -138,14 +138,14 @@
         }
 
         .form-header h2 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--primary);
             margin-bottom: 10px;
         }
 
         .form-header p {
             color: var(--gray);
-            font-size: 1.4rem;
+            font-size: 1rem;
         }
 
         .form-group {
@@ -236,16 +236,6 @@
             border-color: #DB4437;
         }
 
-        .facebook:hover {
-            color: #4267B2;
-            border-color: #4267B2;
-        }
-
-        .apple:hover {
-            color: #000;
-            border-color: #000;
-        }
-
         .signup-btn {
             width: 100%;
             padding: 15px;
@@ -302,11 +292,6 @@
             transform: translateX(0);
         }
 
-        .notification i {
-            margin-right: 15px;
-            font-size: 1.5rem;
-        }
-
         .notification.success i {
             color: var(--secondary);
         }
@@ -356,8 +341,6 @@
             }
         }
     </style>
-   <script type="module" src="../js/firebase.js"></script>
-
 </head>
 <body>
     <div class="container">
@@ -390,13 +373,14 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" placeholder="+1 (123) 456-7890" required>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Create a strong password" required>
+                    <span class="password-toggle"><i class="fas fa-eye"></i></span>
                 </div>
                 
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Create a strong password" required>
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
                     <span class="password-toggle"><i class="fas fa-eye"></i></span>
                 </div>
                 
@@ -411,12 +395,6 @@
                 <div class="social-btn google" title="Sign up with Google">
                     <i class="fab fa-google"></i>
                 </div>
-                <div class="social-btn facebook" title="Sign up with Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </div>
-                <div class="social-btn apple" title="Sign up with Apple">
-                    <i class="fab fa-apple"></i>
-                </div>
             </div>
             
             <p class="signin-link">
@@ -430,113 +408,106 @@
         <span>Account created successfully!</span>
     </div>
 
- <script type="module">
-import { auth, db } from "../js/firebase.js";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-// =======================
-// 🔒 PASSWORD VISIBILITY
-// =======================
-const passwordInput = document.getElementById('password');
-const passwordToggle = document.querySelector('.password-toggle');
-
-if (passwordToggle) {
-  passwordToggle.addEventListener('click', () => {
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    const icon = passwordToggle.querySelector('i');
-    icon.classList.toggle('fa-eye');
-    icon.classList.toggle('fa-eye-slash');
-  });
-}
-
-// =======================
-// 🔔 NOTIFICATION SYSTEM
-// =======================
-function showNotification(message, type) {
-  const notificationEl = document.getElementById('notification');
-  const icon = notificationEl.querySelector('i');
-  const text = notificationEl.querySelector('span');
-
-  // Update message and type
-  text.textContent = message;
-  notificationEl.className = 'notification ' + type;
-
-  // Choose icon
-  icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-
-  // Show notification
-  notificationEl.classList.add('show');
-  setTimeout(() => notificationEl.classList.remove('show'), 3000);
-}
-
-// =======================
-// 🧾 SIGNUP FORM LOGIC
-// =======================
-const signupForm = document.getElementById('signupForm');
-
-signupForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-
-  // Basic validations
-  if (!email || !password || !phone)
-    return showNotification('Please fill in all fields', 'error');
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    return showNotification('Please enter a valid email address', 'error');
-
-  if (password.length < 8)
-    return showNotification('Password must be at least 8 characters', 'error');
-
-  if (!/^[\d\s\-\+\(\)]+$/.test(phone))
-    return showNotification('Please enter a valid phone number', 'error');
-
-  try {
-    // 🔹 Create user in Firebase Auth
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
-
-    // 🔹 Save info in Firestore
-    await setDoc(doc(db, "users", user.uid), {
-      email,
-      phone,
-      createdAt: new Date()
-    });
-
-    // 🔹 Send verification email
-    await sendEmailVerification(user);
-
-    showNotification('Verification email sent! Check your inbox.', 'success');
-
-    // Redirect to login after short delay
-    setTimeout(() => {
-      window.location.href = "/pages/login.html";
-    }, 2000);
-
-  } catch (err) {
-    showNotification('Signup failed: ' + err.message, 'error');
-  }
-});
-
-// =======================
-// 🌐 SOCIAL LOGIN BUTTONS
-// =======================
-const socialButtons = document.querySelectorAll('.social-btn');
-socialButtons.forEach(button => {
-  button.addEventListener('click', function() {
-    const platform = this.classList[1];
-    showNotification(`Redirecting to ${platform} login...`, 'success');
-  });
-});
-</script>
-
+    <script>
+        // Password visibility toggle
+        const passwordInputs = document.querySelectorAll('input[type="password"]');
+        const passwordToggles = document.querySelectorAll('.password-toggle');
+        
+        passwordToggles.forEach((toggle, index) => {
+            toggle.addEventListener('click', function() {
+                const input = passwordInputs[index];
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            });
+        });
+        
+        // Form submission
+        const signupForm = document.getElementById('signupForm');
+        const notification = document.getElementById('notification');
+        
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Basic validation
+            if (!email || !password || !confirmPassword) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showNotification('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Password validation
+            if (password.length < 8) {
+                showNotification('Password must be at least 8 characters', 'error');
+                return;
+            }
+            
+            // Confirm password validation
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+            
+            // Simulate successful signup
+            showNotification('Account created successfully!', 'success');
+            
+            // Reset form
+            setTimeout(() => {
+                signupForm.reset();
+            }, 2000);
+        });
+        
+        // Show notification
+        function showNotification(message, type) {
+            const notificationEl = document.getElementById('notification');
+            const icon = notificationEl.querySelector('i');
+            const text = notificationEl.querySelector('span');
+            
+            // Update notification content
+            text.textContent = message;
+            
+            // Update notification type
+            notificationEl.className = 'notification';
+            notificationEl.classList.add(type);
+            
+            // Update icon
+            if (type === 'success') {
+                icon.className = 'fas fa-check-circle';
+            } else {
+                icon.className = 'fas fa-exclamation-circle';
+            }
+            
+            // Show notification
+            notificationEl.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notificationEl.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Social login buttons
+        const socialButtons = document.querySelectorAll('.social-btn');
+        socialButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const platform = this.classList[1];
+                showNotification(`Redirecting to ${platform} login...`, 'success');
+            });
+        });
+    </script>
 </body>
 </html>

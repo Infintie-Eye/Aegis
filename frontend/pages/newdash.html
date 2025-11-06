@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Your Page Title</title>
+    
     <title>Aegis - Mental Resilience Dashboard</title>
+     <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="styles/main.css"> <!-- Your existing styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="scripts/navbar.js"></script>
+    
+     
     <style>
+
         :root {
             --primary: #4a6bdf;
             --secondary: #6c63ff;
@@ -38,120 +49,22 @@
             min-height: 100vh;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: linear-gradient(180deg, var(--dark) 0%, #1a1f3a 100%);
-            color: white;
-            padding: 20px 0;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 100;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            padding: 0 20px 30px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo i {
-            font-size: 28px;
-            color: var(--accent);
-            margin-right: 12px;
-        }
-
-        .logo h1 {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .logo span {
-            color: var(--accent);
-        }
-
-        .nav-menu {
-            list-style: none;
-            padding: 20px 0;
-        }
-
-        .nav-item {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: rgba(255, 255, 255, 0.1);
-            border-left: 4px solid var(--accent);
-        }
-
-        .nav-item i {
-            margin-right: 15px;
-            font-size: 18px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .user-profile {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-        }
-
-        .user-info h4 {
-            font-size: 16px;
-            margin-bottom: 2px;
-        }
-
-        .user-info p {
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
         /* Main Content */
         .main-content {
-            margin-left: 260px;
             flex: 1;
             padding: 30px;
         }
 
         .header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             margin-bottom: 30px;
+            gap: 80px;
         }
 
         .header h2 {
-            font-size: 28px;
+            font-size: 50px;
             color: var(--dark);
         }
 
@@ -597,20 +510,6 @@
         }
 
         /* Responsive */
-        @media (max-width: 992px) {
-            .sidebar {
-                width: 70px;
-            }
-            
-            .logo h1, .nav-item span, .user-info {
-                display: none;
-            }
-            
-            .main-content {
-                margin-left: 70px;
-            }
-        }
-
         @media (max-width: 768px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
@@ -629,40 +528,16 @@
 
 </head>
 <body>
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="logo">
-                <i class="fas fa-shield-alt"></i>
-                <h1>Aegis<span>.</span></h1>
-            </div>
-            
-            <ul class="nav-menu">
-                <li class="nav-item active">
-                    <i class="fas fa-home"></i>
-                    <span><a href="dashboard.html">Dashboard</a></span>
-                </li>
-                <li class="nav-item">
-                    <i class="fas fa-robot"></i>
-                    <span><a href="aichatbot.html">AI Companion</a></span>
-                </li>
-                <li class="nav-item">
-                    <i class="fas fa-users"></i>
-                    <span><a href="community_list.html">Community</a></span>
-                </li>
-            </ul>
-            
-            <div class="user-profile">
-                <div class="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="user-info">
-                    <h4>Alex Johnson</h4>
-                    <p>Premium User</p>
-                </div>
-            </div>
-        </div>
-        
+    <!-- Include navbar -->
+    <div id="navbar-container"></div>
+    
+    <!-- Mobile menu toggle (for responsive design) -->
+    <button class="mobile-menu-toggle">☰</button>
+    
+    <!-- Main content -->
+    <div class="main-content">
+        <!-- Your page content here -->
+    </div>
         <!-- Main Content -->
         <div class="main-content">
             <div class="header">
@@ -946,9 +821,19 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    </div> 
+    
+    
     <script>
+
+    
+          // Load navbar
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-container').innerHTML = data;
+            });
+    
         // Initialize 3D Graphics
         function init3D() {
             const container = document.getElementById('three-container');
@@ -1195,15 +1080,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             init3D();
             initCharts();
-            
-            // Add interactivity to nav items
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    navItems.forEach(nav => nav.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
         });
     </script>
     <script type="module">
