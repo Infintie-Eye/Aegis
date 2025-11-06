@@ -3,538 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Aegis - Your Mental Wellness Companion</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Panda Login</title>
     <style>
-        :root {
-            --primary: #5B9BD5;
-            --primary-dark: #4A8AC4;
-            --secondary: #70AD47;
-            --accent: #FFC000;
-            --light: #F5F7FA;
-            --dark: #333333;
-            --gray: #7F8C8D;
-            --white: #FFFFFF;
-            --shadow: rgba(0, 0, 0, 0.1);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-            min-height: 100vh;
+            background: linear-gradient(135deg, #06010c 0%, #010b1c 100%);
+            height: 100vh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 20px;
-            color: var(--dark);
+            align-items: center;
         }
-
-        .container {
-            width: 100%;
-            max-width: 1000px;
-            display: flex;
+        
+        .login-container {
+            background-color: white;
             border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px var(--shadow);
-            background: var(--white);
-        }
-
-        .left-panel {
-            flex: 1;
-            padding: 60px 40px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: var(--white);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .left-panel::before {
-            content: "";
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .left-panel::after {
-            content: "";
-            position: absolute;
-            bottom: -70px;
-            left: -70px;
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .app-info {
-            position: relative;
-            z-index: 2;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .logo i {
-            font-size: 2.5rem;
-            margin-right: 15px;
-            color: var(--accent);
-        }
-
-        .logo h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-        }
-
-        .tagline {
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        .features {
-            list-style: none;
-        }
-
-        .features li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        .features i {
-            margin-right: 15px;
-            color: var(--accent);
-            font-size: 1.2rem;
-        }
-
-        .right-panel {
-            flex: 1;
-            padding: 60px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .form-header {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 400px;
             text-align: center;
-            margin-bottom: 40px;
         }
-
-        .form-header h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .form-header p {
-            color: var(--gray);
-            font-size: 1.4rem;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
+        
+        .panda-container {
             position: relative;
+            height: 200px;
+            margin-bottom: 30px;
         }
-
-        .form-group label {
+        
+        .panda {
+            width: 150px;
+            height: 150px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            position: relative;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .panda-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            border-radius: 50%;
+            top: 0;
+            left: 0;
+        }
+        
+        .panda-ear {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #333;
+            border-radius: 50%;
+            top: -10px;
+        }
+        
+        .panda-ear.left {
+            left: 20px;
+        }
+        
+        .panda-ear.right {
+            right: 20px;
+        }
+        
+        .panda-eye {
+            position: absolute;
+            width: 25px;
+            height: 30px;
+            background-color: #333;
+            border-radius: 50%;
+            top: 50px;
+        }
+        
+        .panda-eye.left {
+            left: 35px;
+        }
+        
+        .panda-eye.right {
+            right: 35px;
+        }
+        
+        .panda-eye.closed {
+            height: 5px;
+            top: 65px;
+        }
+        
+        .panda-hand {
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            background-color: #333;
+            border-radius: 15px;
+            top: 70px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .panda-hand.left {
+            left: 15px;
+            transform: rotate(-30deg);
+        }
+        
+        .panda-hand.right {
+            right: 15px;
+            transform: rotate(30deg);
+        }
+        
+        .panda-hand.visible {
+            opacity: 1;
+        }
+        
+        .panda-nose {
+            position: absolute;
+            width: 15px;
+            height: 10px;
+            background-color: #333;
+            border-radius: 50%;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: var(--dark);
+            color: #333;
         }
-
-        .form-group input {
+        
+        input {
             width: 100%;
-            padding: 15px 20px;
+            padding: 12px 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
         }
-
-        .form-group input:focus {
+        
+        input:focus {
+            border-color: #07010e;
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(91, 155, 213, 0.2);
         }
-
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 43px;
-            cursor: pointer;
-            color: var(--gray);
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 30px 0;
-            color: var(--gray);
-        }
-
-        .divider::before,
-        .divider::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: #e0e0e0;
-        }
-
-        .divider span {
-            padding: 0 15px;
-            font-size: 0.9rem;
-        }
-
-        .social-login {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .social-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid #e0e0e0;
-            background: var(--white);
-            color: var(--dark);
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .social-btn:hover {
-            background: var(--light);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px var(--shadow);
-        }
-
-        .google:hover {
-            color: #DB4437;
-            border-color: #DB4437;
-        }
-
-        .facebook:hover {
-            color: #4267B2;
-            border-color: #4267B2;
-        }
-
-        .apple:hover {
-            color: #000;
-            border-color: #000;
-        }
-
-        .signup-btn {
+        
+        button {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: var(--white);
+            padding: 12px;
+            background: linear-gradient(135deg, #03010c 0%, #030109 100%);
+            color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            border-radius: 8px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-
-        .signup-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(91, 155, 213, 0.3);
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-
-        .signin-link {
-            text-align: center;
-            color: var(--gray);
-            font-size: 0.95rem;
-        }
-
-        .signin-link a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .signin-link a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            background: var(--white);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px var(--shadow);
-            display: flex;
-            align-items: center;
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification i {
-            margin-right: 15px;
-            font-size: 1.5rem;
-        }
-
-        .notification.success i {
-            color: var(--secondary);
-        }
-
-        .notification.error i {
-            color: #e74c3c;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                max-width: 450px;
-            }
-
-            .left-panel {
-                padding: 40px 30px;
-            }
-
-            .right-panel {
-                padding: 40px 30px;
-            }
-
-            .logo h1 {
-                font-size: 1.8rem;
-            }
-
-            .form-header h2 {
-                font-size: 1.7rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                border-radius: 15px;
-            }
-
-            .left-panel, .right-panel {
-                padding: 30px 20px;
-            }
-
-            .logo h1 {
-                font-size: 1.6rem;
-            }
-
-            .form-header h2 {
-                font-size: 1.5rem;
-            }
+        
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
         }
     </style>
-   <script type="module" src="../js/firebase.js"></script>
-
+    <script type="module" src="../frontend/js/firebase.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="left-panel">
-            <div class="app-info">
-                <div class="logo">
-                    <i class="fas fa-shield-alt"></i>
-                    <h1>Aegis</h1>
+    <div class="login-container">
+        <h1>Welcome Back</h1>
+    <div id="notification" class="notification">
+  <i class="fas fa-check-circle"></i>
+  <span></span>
+</div>
+    
+        <div class="panda-container">
+            <div class="panda">
+                <div class="panda-face">
+                    <div class="panda-ear left"></div>
+                    <div class="panda-ear right"></div>
+                    <div class="panda-eye left" id="leftEye"></div>
+                    <div class="panda-eye right" id="rightEye"></div>
+                    <div class="panda-nose"></div>
                 </div>
-                <p class="tagline">Your intelligent mental resilience companion</p>
-                <ul class="features">
-                    <li><i class="fas fa-robot"></i> AI-powered emotional support</li>
-                    <li><i class="fas fa-users"></i> Safe community spaces</li>
-                    <li><i class="fas fa-shield-virus"></i> Crisis detection & intervention</li>
-                    <li><i class="fas fa-chart-line"></i> Personalized resilience building</li>
-                </ul>
+                <div class="panda-hand left" id="leftHand"></div>
+                <div class="panda-hand right" id="rightHand"></div>
             </div>
         </div>
         
-        <div class="right-panel">
-            <div class="form-header">
-                <h2>Create Your Account</h2>
-                <p>Join thousands finding mental wellness with Aegis</p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Email</label>
+                <input type="text" id="username" name="username" required>
             </div>
             
-            <form id="signupForm">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="your.email@example.com" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" placeholder="+1 (123) 456-7890" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Create a strong password" required>
-                    <span class="password-toggle"><i class="fas fa-eye"></i></span>
-                </div>
-                
-                <button type="submit" class="signup-btn">Sign Up</button>
-            </form>
-            
-            <div class="divider">
-                <span>or sign up with</span>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
             </div>
             
-            <div class="social-login">
-                <div class="social-btn google" title="Sign up with Google">
-                    <i class="fab fa-google"></i>
-                </div>
-                <div class="social-btn facebook" title="Sign up with Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </div>
-                <div class="social-btn apple" title="Sign up with Apple">
-                    <i class="fab fa-apple"></i>
-                </div>
-            </div>
-            
-            <p class="signin-link">
-                Already have an account? <a href="#">Sign In</a>
-            </p>
-        </div>
-    </div>
-    
-    <div id="notification" class="notification">
-        <i class="fas fa-check-circle"></i>
-        <span>Account created successfully!</span>
+            <button type="submit">Login</button>
+        </form>
     </div>
 
- <script type="module">
-import { auth, db } from "../js/firebase.js";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+    <script type="module">
+import { auth } from "../js/firebase.js";
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
-// =======================
-// 🔒 PASSWORD VISIBILITY
-// =======================
+// 🐼 Panda references
+const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
-const passwordToggle = document.querySelector('.password-toggle');
+const leftEye = document.getElementById('leftEye');
+const rightEye = document.getElementById('rightEye');
+const leftHand = document.getElementById('leftHand');
+const rightHand = document.getElementById('rightHand');
+const loginForm = document.getElementById('loginForm');
 
-if (passwordToggle) {
-  passwordToggle.addEventListener('click', () => {
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    const icon = passwordToggle.querySelector('i');
-    icon.classList.toggle('fa-eye');
-    icon.classList.toggle('fa-eye-slash');
-  });
+// 🐼 Panda animation
+function coverEyes() {
+  leftEye.classList.add('closed');
+  rightEye.classList.add('closed');
+  leftHand.classList.add('visible');
+  rightHand.classList.add('visible');
 }
 
-// =======================
-// 🔔 NOTIFICATION SYSTEM
-// =======================
+function uncoverEyes() {
+  leftEye.classList.remove('closed');
+  rightEye.classList.remove('closed');
+  leftHand.classList.remove('visible');
+  rightHand.classList.remove('visible');
+}
+
+usernameInput.addEventListener('focus', coverEyes);
+passwordInput.addEventListener('focus', coverEyes);
+usernameInput.addEventListener('blur', uncoverEyes);
+passwordInput.addEventListener('blur', uncoverEyes);
+
+// ===============================
+// ✨ Notification System (same as signup)
+// ===============================
 function showNotification(message, type) {
-  const notificationEl = document.getElementById('notification');
-  const icon = notificationEl.querySelector('i');
-  const text = notificationEl.querySelector('span');
+  const notificationEl = document.getElementById("notification");
+  const icon = notificationEl.querySelector("i");
+  const text = notificationEl.querySelector("span");
 
-  // Update message and type
   text.textContent = message;
-  notificationEl.className = 'notification ' + type;
+  notificationEl.className = "notification " + type;
 
-  // Choose icon
-  icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+  icon.className =
+    type === "success"
+      ? "fas fa-check-circle"
+      : "fas fa-exclamation-circle";
 
-  // Show notification
-  notificationEl.classList.add('show');
-  setTimeout(() => notificationEl.classList.remove('show'), 3000);
+  notificationEl.classList.add("show");
+
+  setTimeout(() => notificationEl.classList.remove("show"), 3000);
 }
 
-// =======================
-// 🧾 SIGNUP FORM LOGIC
-// =======================
-const signupForm = document.getElementById('signupForm');
-
-signupForm.addEventListener('submit', async (e) => {
+// ===============================
+// 🔐 Login logic
+// ===============================
+loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value.trim();
-  const phone = document.getElementById('phone').value.trim();
+  const email = usernameInput.value.trim();
+  const password = passwordInput.value.trim();
 
-  // Basic validations
-  if (!email || !password || !phone)
-    return showNotification('Please fill in all fields', 'error');
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    return showNotification('Please enter a valid email address', 'error');
-
-  if (password.length < 8)
-    return showNotification('Password must be at least 8 characters', 'error');
-
-  if (!/^[\d\s\-\+\(\)]+$/.test(phone))
-    return showNotification('Please enter a valid phone number', 'error');
+  if (!email || !password) {
+    showNotification("Please enter both email and password.", "error");
+    return;
+  }
 
   try {
-    // 🔹 Create user in Firebase Auth
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
-
-    // 🔹 Save info in Firestore
-    await setDoc(doc(db, "users", user.uid), {
-      email,
-      phone,
-      createdAt: new Date()
-    });
-
-    // 🔹 Send verification email
-    await sendEmailVerification(user);
-
-    showNotification('Verification email sent! Check your inbox.', 'success');
-
-    // Redirect to login after short delay
+    await signInWithEmailAndPassword(auth, email, password);
+    showNotification("Login successful! Redirecting...", "success");
     setTimeout(() => {
-      window.location.href = "/pages/login.html";
-    }, 2000);
-
+      window.location.href = "/pages/newdash.html";
+    }, 1500);
   } catch (err) {
-    showNotification('Signup failed: ' + err.message, 'error');
+    showNotification(err.message, "error");
   }
-});
-
-// =======================
-// 🌐 SOCIAL LOGIN BUTTONS
-// =======================
-const socialButtons = document.querySelectorAll('.social-btn');
-socialButtons.forEach(button => {
-  button.addEventListener('click', function() {
-    const platform = this.classList[1];
-    showNotification(`Redirecting to ${platform} login...`, 'success');
-  });
 });
 </script>
 

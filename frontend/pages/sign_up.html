@@ -341,6 +341,7 @@
             }
         }
     </style>
+    <script type="module" src="../frontend/js/firebase.js"></script>  
 </head>
 <body>
     <div class="container">
@@ -407,107 +408,64 @@
         <i class="fas fa-check-circle"></i>
         <span>Account created successfully!</span>
     </div>
+<script type="module">
+import { auth } from "../js/firebase.js";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
 
-    <script>
-        // Password visibility toggle
-        const passwordInputs = document.querySelectorAll('input[type="password"]');
-        const passwordToggles = document.querySelectorAll('.password-toggle');
-        
-        passwordToggles.forEach((toggle, index) => {
-            toggle.addEventListener('click', function() {
-                const input = passwordInputs[index];
-                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-                input.setAttribute('type', type);
-                
-                const icon = this.querySelector('i');
-                icon.classList.toggle('fa-eye');
-                icon.classList.toggle('fa-eye-slash');
-            });
-        });
-        
-        // Form submission
-        const signupForm = document.getElementById('signupForm');
-        const notification = document.getElementById('notification');
-        
-        signupForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form values
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            // Basic validation
-            if (!email || !password || !confirmPassword) {
-                showNotification('Please fill in all fields', 'error');
-                return;
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showNotification('Please enter a valid email address', 'error');
-                return;
-            }
-            
-            // Password validation
-            if (password.length < 8) {
-                showNotification('Password must be at least 8 characters', 'error');
-                return;
-            }
-            
-            // Confirm password validation
-            if (password !== confirmPassword) {
-                showNotification('Passwords do not match', 'error');
-                return;
-            }
-            
-            // Simulate successful signup
-            showNotification('Account created successfully!', 'success');
-            
-            // Reset form
-            setTimeout(() => {
-                signupForm.reset();
-            }, 2000);
-        });
-        
-        // Show notification
-        function showNotification(message, type) {
-            const notificationEl = document.getElementById('notification');
-            const icon = notificationEl.querySelector('i');
-            const text = notificationEl.querySelector('span');
-            
-            // Update notification content
-            text.textContent = message;
-            
-            // Update notification type
-            notificationEl.className = 'notification';
-            notificationEl.classList.add(type);
-            
-            // Update icon
-            if (type === 'success') {
-                icon.className = 'fas fa-check-circle';
-            } else {
-                icon.className = 'fas fa-exclamation-circle';
-            }
-            
-            // Show notification
-            notificationEl.classList.add('show');
-            
-            // Hide after 3 seconds
-            setTimeout(() => {
-                notificationEl.classList.remove('show');
-            }, 3000);
-        }
-        
-        // Social login buttons
-        const socialButtons = document.querySelectorAll('.social-btn');
-        socialButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const platform = this.classList[1];
-                showNotification(`Redirecting to ${platform} login...`, 'success');
-            });
-        });
-    </script>
+// Notification system
+function showNotification(message, type) {
+  const notificationEl = document.getElementById('notification');
+  const icon = notificationEl.querySelector('i');
+  const text = notificationEl.querySelector('span');
+  text.textContent = message;
+  notificationEl.className = 'notification ' + type;
+  icon.className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+  notificationEl.classList.add('show');
+  setTimeout(() => notificationEl.classList.remove('show'), 3000);
+}
+
+// SIGNUP LOGIC
+const signupForm = document.getElementById('signupForm');
+signupForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+  if (!email || !password || !confirmPassword)
+    return showNotification('Please fill all fields', 'error');
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return showNotification('Invalid email address', 'error');
+
+  if (password.length < 8)
+    return showNotification('Password must be at least 8 characters', 'error');
+
+  if (password !== confirmPassword)
+    return showNotification('Passwords do not match', 'error');
+
+  try {
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCred.user;
+
+    await sendEmailVerification(user);
+
+    showNotification('Verification email sent! Redirecting...', 'success');
+
+    // 🔹 Redirect to waiting page
+    setTimeout(() => {
+      window.location.href = "/pages/waiting.html";
+    }, 2000);
+
+  } catch (err) {
+    showNotification('Signup failed: ' + err.message, 'error');
+  }
+});
+</script>
+
 </body>
-</html>
+</html> 

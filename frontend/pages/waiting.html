@@ -204,6 +204,7 @@
             }
         }
     </style>
+    <script type="module" src="../frontend/js/firebase.js"></script>
 </head>
 <body>
     <div class="floating-shapes">
@@ -228,12 +229,48 @@
         </div>
         
         <div class="message">
-            Signing you in... Please wait
+            Verify your email to continue signing in...
         </div>
         
         <div class="progress-bar">
             <div class="progress"></div>
         </div>
     </div>
+    <script type="module">
+  import { auth } from "../js/firebase.js";
+  import { sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+  // ⏳ Function to check verification status
+  async function checkVerification() {
+    const user = auth.currentUser;
+    if (user) {
+      await user.reload(); // refresh user info
+      if (user.emailVerified) {
+        // ✅ Redirect once verified
+        window.location.href = "/pages/newdash.html";
+      }
+    } else {
+      // If user is missing (not logged in), send them back to sign-up
+      window.location.href = "/pages/sign_up.html";
+    }
+  }
+
+  // 🔁 Check every 5 seconds
+  setInterval(checkVerification, 5000);
+
+  // 🔁 Optional: allow resend of email (if you want a button)
+  // Add this only if you later add a resend button in your design
+  window.resendVerification = async function () {
+    const user = auth.currentUser;
+    if (user) {
+      await sendEmailVerification(user);
+      alert("Verification email resent! Check your inbox.");
+    } else {
+      alert("Session expired. Please sign up again.");
+      window.location.href = "/pages/sign_up.html";
+    }
+  };
+</script>
+
 </body>
 </html>
