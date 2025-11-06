@@ -33,6 +33,11 @@
             min-height: 100vh;
         }
 
+        a {
+            text-decoration: none;
+            color: inherit; /* Inherits color from parent element */
+        }
+
         .dashboard-container {
             display: flex;
             min-height: 100vh;
@@ -536,22 +541,30 @@
             </div>
             
             <ul class="nav-menu">
-                <li class="nav-item active">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
-                </li>
-                <li class="nav-item">
-                    <i class="fas fa-robot"></i>
-                    <span>AI Companion</span>
-                </li>
-                <li class="nav-item">
-                    <i class="fas fa-users"></i>
-                    <span>Community</span>
-                </li>
-                <li class="nav-item">
-                    <i class="fas fa-user"></i>
-                    <span>Profile</span>
-                </li>
+                <a href="userdashboard.html">
+                    <li class="nav-item active">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </li>
+                </a>
+                <a href="aichatbot.html">
+                    <li class="nav-item">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Companion</span>
+                    </li>
+                </a>
+                <a href="community_list.html">
+                    <li class="nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>Community</span>
+                    </li>
+                </a>
+                <a href="profile.html">
+                    <li class="nav-item">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </li>
+                </a>
             </ul>
             
             <div class="user-profile">
