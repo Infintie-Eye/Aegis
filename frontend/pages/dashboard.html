@@ -625,6 +625,8 @@
             }
         }
     </style>
+    <script type="module" src="../frontend/js/firebase.js"></script>
+
 </head>
 <body>
     <div class="dashboard-container">
@@ -1204,5 +1206,21 @@
             });
         });
     </script>
+    <script type="module">
+import { auth } from "/frontend/js/firebase.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.querySelector('.user-info h4').textContent = user.email.split('@')[0];
+  }
+});
+
+document.querySelector('.user-profile').addEventListener('click', async () => {
+  await signOut(auth);
+  window.location.href = '/login.html';
+});
+</script>
+
 </body>
 </html>
