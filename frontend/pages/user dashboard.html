@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aegis - Mental Resilience Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <link rel="stylesheet" href="styles/navbar.css">
+    <link rel="stylesheet" href="styles/main.css"> <!-- Your existing styles -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="scripts/navbar.js"></script>
+    <script>
     <style>
         :root {
             --primary: #4a6bdf;
@@ -36,11 +40,6 @@
         .dashboard-container {
             display: flex;
             min-height: 100vh;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
         }
 
         /* Sidebar */
@@ -423,6 +422,96 @@
             background: rgba(74, 107, 223, 0.1);
         }
 
+        /* Chat Interface */
+        .chat-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .chat-header {
+            padding: 15px 20px;
+            background: var(--dark);
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-header i {
+            font-size: 24px;
+            margin-right: 15px;
+            color: var(--accent);
+        }
+
+        .chat-header h3 {
+            font-size: 18px;
+        }
+
+        .chat-messages {
+            height: 300px;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 15px;
+            border-radius: 18px;
+            font-size: 14px;
+        }
+
+        .message.ai .message-content {
+            background: white;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user .message-content {
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-input {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            background: white;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            outline: none;
+            margin-right: 10px;
+        }
+
+        .chat-input button {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
         /* Community Section */
         .community-grid {
             display: grid;
@@ -501,101 +590,6 @@
             color: #777;
         }
 
-        /* Projects Section */
-        .projects-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            padding: 25px;
-        }
-
-        .project-list {
-            list-style: none;
-        }
-
-        .project-item {
-            padding: 15px 0;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-        }
-
-        .project-item:last-child {
-            border-bottom: none;
-        }
-
-        .project-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: white;
-        }
-
-        .project-icon.blue {
-            background: var(--primary);
-        }
-
-        .project-icon.purple {
-            background: var(--secondary);
-        }
-
-        .project-icon.pink {
-            background: var(--accent);
-        }
-
-        .project-info {
-            flex: 1;
-        }
-
-        .project-info h4 {
-            font-size: 16px;
-            margin-bottom: 3px;
-        }
-
-        .project-info p {
-            font-size: 13px;
-            color: #777;
-        }
-
-        .project-progress {
-            width: 100px;
-            margin-right: 15px;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: #f0f0f0;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 4px;
-        }
-
-        .progress-fill.blue {
-            background: var(--primary);
-        }
-
-        .progress-fill.purple {
-            background: var(--secondary);
-        }
-
-        .progress-fill.pink {
-            background: var(--accent);
-        }
-
-        .project-percentage {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
         /* Responsive */
         @media (max-width: 992px) {
             .sidebar {
@@ -638,15 +632,19 @@
             <ul class="nav-menu">
                 <li class="nav-item active">
                     <i class="fas fa-home"></i>
-                    <span><a href="dashboard.html">Dashboard</a></span>
+                    <span>Home</span>
                 </li>
                 <li class="nav-item">
                     <i class="fas fa-robot"></i>
-                    <span><a href="aichatbot.html">AI Companion</a></span>
+                    <span>AI Companion</span>
                 </li>
                 <li class="nav-item">
                     <i class="fas fa-users"></i>
-                    <span><a href="community_list.html">Community</a></span>
+                    <span>Community</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
                 </li>
             </ul>
             
@@ -741,6 +739,95 @@
                     </div>
                     <div class="card-chart">
                         <canvas id="safetyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Companion Section -->
+            <div class="feature-section">
+                <h3 class="section-title"><i class="fas fa-robot"></i> AI Companion</h3>
+                
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <i class="fas fa-robot"></i>
+                        <h3>Aegis Companion</h3>
+                    </div>
+                    
+                    <div class="chat-messages">
+                        <div class="message ai">
+                            <div class="message-content">
+                                Hello! I'm here to support you today. How are you feeling?
+                            </div>
+                        </div>
+                        
+                        <div class="message user">
+                            <div class="message-content">
+                                A bit stressed with work deadlines
+                            </div>
+                        </div>
+                        
+                        <div class="message ai">
+                            <div class="message-content">
+                                I understand that work pressure can be overwhelming. Would you like to try a quick breathing exercise?
+                            </div>
+                        </div>
+                        
+                        <div class="message user">
+                            <div class="message-content">
+                                Yes, that would help
+                            </div>
+                        </div>
+                        
+                        <div class="message ai">
+                            <div class="message-content">
+                                Great! Let's try a 4-7-8 breathing exercise. Inhale for 4 seconds, hold for 7 seconds, and exhale for 8 seconds. Repeat this 4 times.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input">
+                        <input type="text" placeholder="Type a message...">
+                        <button>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <h3>Personalized Support</h3>
+                            <p>Tailored to your emotional needs</p>
+                        </div>
+                        <div class="feature-body">
+                            <ul class="feature-list">
+                                <li><i class="fas fa-check-circle"></i> Adapts to your emotional patterns</li>
+                                <li><i class="fas fa-check-circle"></i> Evidence-based techniques</li>
+                                <li><i class="fas fa-check-circle"></i> Always available for support</li>
+                            </ul>
+                        </div>
+                        <div class="feature-footer">
+                            <span>Active Now</span>
+                            <button class="btn btn-primary">Interact</button>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <h3>Voice Analysis</h3>
+                            <p>Advanced emotion detection</p>
+                        </div>
+                        <div class="feature-body">
+                            <ul class="feature-list">
+                                <li><i class="fas fa-check-circle"></i> Real-time emotion detection</li>
+                                <li><i class="fas fa-check-circle"></i> Stress level monitoring</li>
+                                <li><i class="fas fa-check-circle"></i> Personalized interventions</li>
+                            </ul>
+                        </div>
+                        <div class="feature-footer">
+                            <span>Coming Soon</span>
+                            <button class="btn btn-outline">Learn More</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -870,83 +957,15 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Projects Section -->
-            <div class="feature-section">
-                <h3 class="section-title"><i class="fas fa-tasks"></i> Community Based Projects</h3>
-                
-                <div class="projects-container">
-                    <ul class="project-list">
-                        <li class="project-item">
-                            <div class="project-icon blue">
-                                <i class="fas fa-brain"></i>
-                            </div>
-                            <div class="project-info">
-                                <h4>Mindfulness Challenge</h4>
-                                <p>30-day mindfulness and meditation program</p>
-                            </div>
-                            <div class="project-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill blue" style="width: 75%;"></div>
-                                </div>
-                            </div>
-                            <div class="project-percentage">75%</div>
-                        </li>
-                        
-                        <li class="project-item">
-                            <div class="project-icon purple">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="project-info">
-                                <h4>Peer Support Network</h4>
-                                <p>Building connections within the community</p>
-                            </div>
-                            <div class="project-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill purple" style="width: 60%;"></div>
-                                </div>
-                            </div>
-                            <div class="project-percentage">60%</div>
-                        </li>
-                        
-                        <li class="project-item">
-                            <div class="project-icon pink">
-                                <i class="fas fa-heart"></i>
-                            </div>
-                            <div class="project-info">
-                                <h4>Emotional Awareness Campaign</h4>
-                                <p>Raising awareness about mental health</p>
-                            </div>
-                            <div class="project-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill pink" style="width: 90%;"></div>
-                                </div>
-                            </div>
-                            <div class="project-percentage">90%</div>
-                        </li>
-                        
-                        <li class="project-item">
-                            <div class="project-icon blue">
-                                <i class="fas fa-book"></i>
-                            </div>
-                            <div class="project-info">
-                                <h4>Resilience Building Workshop</h4>
-                                <p>Weekly workshops on building mental resilience</p>
-                            </div>
-                            <div class="project-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill blue" style="width: 45%;"></div>
-                                </div>
-                            </div>
-                            <div class="project-percentage">45%</div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </div>
 
     <script>
+         fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar-container').innerHTML = data;
+            });
         // Initialize 3D Graphics
         function init3D() {
             const container = document.getElementById('three-container');
@@ -1201,6 +1220,39 @@
                     navItems.forEach(nav => nav.classList.remove('active'));
                     this.classList.add('active');
                 });
+            });
+            
+            // Add interactivity to chat input
+            const chatInput = document.querySelector('.chat-input input');
+            const chatSendBtn = document.querySelector('.chat-input button');
+            const chatMessages = document.querySelector('.chat-messages');
+            
+            function sendMessage() {
+                if (chatInput.value.trim() !== '') {
+                    const userMessage = document.createElement('div');
+                    userMessage.className = 'message user';
+                    userMessage.innerHTML = `<div class="message-content">${chatInput.value}</div>`;
+                    chatMessages.appendChild(userMessage);
+                    
+                    // Simulate AI response after a delay
+                    setTimeout(() => {
+                        const aiMessage = document.createElement('div');
+                        aiMessage.className = 'message ai';
+                        aiMessage.innerHTML = `<div class="message-content">Thank you for sharing. I'm here to support you. Would you like to try a mindfulness exercise?</div>`;
+                        chatMessages.appendChild(aiMessage);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000);
+                    
+                    chatInput.value = '';
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            }
+            
+            chatSendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
             });
         });
     </script>
