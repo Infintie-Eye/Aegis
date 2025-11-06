@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindfulSpace - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6a5acd;
+            --secondary-color: #87ceeb;
+            --accent-color: #98fb98;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --info-color: #17a2b8;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5, #e8f5e9);
+            background-size: 300% 300%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Vertical Navigation */
+        .vertical-nav {
+            width: 80px;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            justify-content: center;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(106, 90, 205, 0.1);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background-color: rgba(106, 90, 205, 0.2);
+            color: var(--primary-color);
+        }
+
+        .nav-item i {
+            font-size: 24px;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .nav-item:hover i {
+            color: var(--accent-color);
+        }
+
+        .nav-item.active i {
+            color: var(--primary-color);
+        }
+
+        .nav-tooltip {
+            position: absolute;
+            left: 70px;
+            background-color: var(--dark-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-item:hover .nav-tooltip {
+            opacity: 1;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 80px;
+            padding: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* Enhanced Profile Picture Container */
+        .profile-pic-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid transparent;
+            background: linear-gradient(white, white) padding-box,
+                        linear-gradient(135deg, var(--primary-color), var(--accent-color)) border-box;
+            box-shadow: 0 0 0 5px rgba(152, 251, 152, 0.3), 
+                        0 10px 25px rgba(106, 90, 205, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 8px rgba(152, 251, 152, 0.4), 
+                        0 15px 35px rgba(106, 90, 205, 0.3);
+        }
+
+        /* Decorative Ring */
+        .profile-ring {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border-radius: 50%;
+            background: conic-gradient(from 180deg at 50% 50%, 
+                        var(--primary-color) 0deg, 
+                        var(--secondary-color) 90deg, 
+                        var(--accent-color) 180deg, 
+                        var(--primary-color) 270deg, 
+                        var(--secondary-color) 360deg);
+            z-index: 1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Status Badge */
+        .status-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--success-color);
+            border: 3px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-badge i {
+            color: white;
+            font-size: 14px;
+        }
+
+        .profile-info h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .profile-info p {
+            color: var(--dark-color);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px 20px;
+            background-color: rgba(135, 206, 235, 0.2);
+            border-radius: 10px;
+            min-width: 100px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--dark-color);
+        }
+
+        /* Content Sections */
+        .content-section {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--accent-color);
+        }
+
+        /* Activity Timeline */
+        .activity-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .activity-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+            border-radius: 3px;
+        }
+
+        .activity-item {
+            position: relative;
+            margin-bottom: 25px;
+            padding-left: 40px;
+        }
+
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px rgba(152, 251, 152, 0.3);
+        }
+
+        .activity-content {
+            background-color: rgba(135, 206, 235, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .activity-content:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .activity-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        /* Achievements */
+        .achievements {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .achievement-badge {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .achievement-badge:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .achievement-badge i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .achievement-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        /* AI Companion Card */
+        .ai-companion {
+            background: linear-gradient(135deg, rgba(106, 90, 205, 0.1), rgba(135, 206, 235, 0.1));
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: var(--transition);
+        }
+
+        .ai-companion:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .ai-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .ai-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .ai-status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--success-color);
+            margin-right: 5px;
+        }
+
+        .ai-message {
+            margin-top: 10px;
+            font-style: italic;
+            color: var(--dark-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .vertical-nav {
+                width: 60px;
+            }
+
+            .nav-item {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 20px;
+            }
+
+            .nav-item i {
+                font-size: 20px;
+            }
+
+            .main-content {
+                margin-left: 60px;
+                padding: 20px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-stats {
+                justify-content: center;
+            }
+
+            .achievements {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .vertical-nav {
+                width: 100%;
+                height: auto;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 10px 0;
+                z-index: 1000;
+            }
+
+            .nav-item {
+                width: auto;
+                height: auto;
+                margin: 0;
+                padding: 10px;
+            }
+
+            .nav-tooltip {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                margin-bottom: 70px;
+                padding: 15px;
+            }
+
+            .profile-info h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 999;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.2);
+            outline: none;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 90, 205, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: var(--dark-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Vertical Navigation -->
+        <nav class="vertical-nav">
+            <div class="nav-item" data-page="home">
+                <i class="fas fa-home"></i>
+                <span class="nav-tooltip">Home</span>
+            </div>
+            <div class="nav-item" data-page="ai">
+                <i class="fas fa-robot"></i>
+                <span class="nav-tooltip">AI Companion</span>
+            </div>
+            <div class="nav-item" data-page="community">
+                <i class="fas fa-users"></i>
+                <span class="nav-tooltip">Community</span>
+            </div>
+            <div class="nav-item active" data-page="profile">
+                <i class="fas fa-user"></i>
+                <span class="nav-tooltip">Profile</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-pic-container">
+                    <div class="profile-ring"></div>
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Profile Picture" class="profile-pic">
+                    <div class="status-badge">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <h1>Alex Morgan</h1>
+                    <p><i class="fas fa-envelope"></i> alex.morgan@example.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> San Francisco, CA</p>
+                    <p><i class="fas fa-calendar-alt"></i> Joined March 2023</p>
+                    
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">Days Active</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">18</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">127</div>
+                            <div class="stat-label">Community Points</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Companion Card -->
+            <div class="content-section">
+                <div class="ai-companion">
+                    <div class="ai-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="ai-info">
+                        <h3>Your AI Companion: MindfulBot</h3>
+                        <p><span class="ai-status"></span> Online and ready to chat</p>
+                        <p class="ai-message">"Hi Alex! I noticed you've been feeling stressed lately. Would you like to try a 5-minute breathing exercise?"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements Section -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-trophy"></i>
+                    Achievements
+                </h2>
+                <div class="achievements">
+                    <div class="achievement-badge">
+                        <i class="fas fa-seedling"></i>
+                        <div class="achievement-name">Newcomer</div>
+                        <div class="achievement-desc">Completed your first wellness activity</div>
+                    </div>
+                    <div class="achievement-badge">
+                        <i class="fas fa-fire"></i>
+                        <div class="achievement-name">7-Day Streak</div>
+                        <div class="achievement-desc">Used the app for 7 consecutive days</div>
+                    </div>
+                    <div class="achievement-badge">
+                        <i class="fas fa-heart"></i>
+                        <div class="achievement-name">Self-Care Champion</div>
+                        <div class="achievement-desc">Completed 10 self-care activities</div>
+                    </div>
+                    <div class="achievement-badge">
+                        <i class="fas fa-hands-helping"></i>
+                        <div class="achievement-name">Community Helper</div>
+                        <div class="achievement-desc">Participated in 5 community projects</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Timeline -->
+            <div class="content-section">
+                <h2 class="section-title">
+                    <i class="fas fa-history"></i>
+                    Recent Activity
+                </h2>
+                <div class="activity-timeline">
+                    <div class="activity-item">
+                        <div class="activity-time">2 hours ago</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Completed "Morning Meditation"</div>
+                            <div>Spent 10 minutes in guided meditation</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-time">Yesterday</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Joined "Anxiety Support" Community Project</div>
+                            <div>Connected with 12 other members</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-time">2 days ago</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Earned "Self-Care Champion" Badge</div>
+                            <div>Completed your 10th self-care activity</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-time">3 days ago</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Chat with MindfulBot</div>
+                            <div>Discussed stress management techniques</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="editProfileBtn">
+        <i class="fas fa-edit"></i>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Profile</h3>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" class="form-control" id="name" value="Alex Morgan">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" value="alex.morgan@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" class="form-control" id="location" value="San Francisco, CA">
+                </div>
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea class="form-control" id="bio" rows="3">Mental wellness advocate and mindfulness practitioner. Working on reducing anxiety and building resilience.</textarea>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items
+                document.querySelectorAll('.nav-item').forEach(navItem => {
+                    navItem.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Here you would typically navigate to the corresponding page
+                const page = this.getAttribute('data-page');
+                console.log(`Navigating to ${page} page`);
+                
+                // For demo purposes, we'll just show an alert
+                if (page !== 'profile') {
+                    alert(`This would navigate to the ${page} page`);
+                }
+            });
+        });
+
+        // Modal functionality
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const editProfileModal = document.getElementById('editProfileModal');
+        const closeModal = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const editProfileForm = document.getElementById('editProfileForm');
+
+        editProfileBtn.addEventListener('click', () => {
+            editProfileModal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', () => {
+            editProfileModal.style.display = 'none';
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            editProfileModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === editProfileModal) {
+                editProfileModal.style.display = 'none';
+            }
+        });
+
+        // Form submission
+        editProfileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const location = document.getElementById('location').value;
+            const bio = document.getElementById('bio').value;
+            
+            // Here you would typically send the data to a server
+            console.log('Profile updated:', { name, email, location, bio });
+            
+            // For demo purposes, we'll just show a success message
+            alert('Profile updated successfully!');
+            
+            // Close modal
+            editProfileModal.style.display = 'none';
+        });
+
+        // Add some interactive animations
+        document.querySelectorAll('.achievement-badge').forEach(badge => {
+            badge.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+
+        // Add interactive hover effect to activity items
+        document.querySelectorAll('.activity-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.querySelector('.activity-content').style.backgroundColor = 'rgba(135, 206, 235, 0.2)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.querySelector('.activity-content').style.backgroundColor = 'rgba(135, 206, 235, 0.1)';
+            });
+        });
+
+        // Add pulse animation to profile picture
+        const profilePic = document.querySelector('.profile-pic');
+        profilePic.addEventListener('mouseenter', function() {
+            this.style.animation = 'pulse 1.5s infinite';
+        });
+        
+        profilePic.addEventListener('mouseleave', function() {
+            this.style.animation = '';
+        });
+
+        // Pulse animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.05); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

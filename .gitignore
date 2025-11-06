@@ -1,1 +1,4 @@
 myenv/
+.vscode/
+.idea/
+.env

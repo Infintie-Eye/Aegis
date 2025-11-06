@@ -3,708 +3,1191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aegis Moodometer - Redesigned</title>
+    <title>Aegis - 3D Personality & Emotional Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Quicksand:wght@500;700&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-        
-        body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f7ff;
-            color: #2d3561;
+        }
+
+        body {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            color: #fff;
             overflow-x: hidden;
-            position: relative;
+            padding: 20px;
         }
-        
-        /* 3D Background */
-        .bg-3d {
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .stars {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-header {
+            text-align: center;
+            margin-bottom: 40px;
             perspective: 1000px;
+        }
+
+        .app-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotateY(0); }
+            50% { transform: translateY(-20px) rotateY(10deg); }
+        }
+
+        .app-logo i {
+            font-size: 3.5rem;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .app-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #fff, #a8edea, #fed6e3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .app-subtitle {
+            font-size: 1.6rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .assessment-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform-style: preserve-3d;
+            position: relative;
             overflow: hidden;
         }
-        
-        .bg-3d-layer {
+
+        .assessment-container::before {
+            content: '';
             position: absolute;
-            width: 120%;
-            height: 120%;
-            top: -10%;
-            left: -10%;
-            background: linear-gradient(135deg, #e0f7fa, #bbdefb, #e1bee7, #d1c4e9);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            animation: rotate 30s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #a8edea, #fed6e3);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .question-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
             transform-style: preserve-3d;
         }
-        
-        .floating-shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.6;
-            filter: blur(40px);
-            animation: float 20s infinite ease-in-out;
+
+        .question-container.active {
+            display: block;
         }
-        
-        .shape1 {
-            width: 300px;
-            height: 300px;
-            background: #80d8ff;
-            top: 10%;
-            left: 5%;
-            animation-delay: 0s;
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
-        .shape2 {
-            width: 200px;
-            height: 200px;
-            background: #b388ff;
-            top: 60%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-        
-        .shape3 {
-            width: 250px;
-            height: 250px;
-            background: #ea80fc;
-            bottom: 10%;
-            left: 15%;
-            animation-delay: 4s;
-        }
-        
-        .shape4 {
-            width: 180px;
-            height: 180px;
-            background: #8c9eff;
-            top: 30%;
-            right: 30%;
-            animation-delay: 6s;
-        }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(20px, -20px) rotate(5deg); }
-            50% { transform: translate(-20px, 10px) rotate(-5deg); }
-            75% { transform: translate(10px, 20px) rotate(3deg); }
-        }
-        
-        /* Navbar Styles */
-        .navbar {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 1.2rem 2rem;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-            position: relative;
-            z-index: 10;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-        }
-        
-        .navbar h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.2rem;
+
+        .question {
+            font-size: 1.8rem;
             font-weight: 700;
+            margin-bottom: 30px;
             text-align: center;
-            color: #9c6ade;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 18px 25px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .option:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .option:hover::before {
+            opacity: 1;
+        }
+
+        .option.selected {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        .option input {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            accent-color: #fff;
+        }
+
+        .option span {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .slider-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .slider-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .slider {
+            width: 100%;
+            height: 12px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+            margin: 15px 0;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #333;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
             letter-spacing: 1px;
             position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        .navbar h1::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, #5c6bc0, #7986cb, #5c6bc0);
-            border-radius: 3px;
-        }
-        
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Bouncing Text */
-        .bouncing-text {
-            font-family: 'Quicksand', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
-            color: #3f51b5;
-            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
-            animation: bounce 2s infinite;
-            position: relative;
-        }
-        
-        .bouncing-text::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: linear-gradient(45deg, #7986cb, #5c6bc0, #3f51b5);
-            border-radius: 15px;
-            z-index: -1;
-            opacity: 0.3;
-            filter: blur(8px);
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-20px);
-            }
-            60% {
-                transform: translateY(-10px);
-            }
-        }
-        
-        /* Moodometer Container */
-        .moodometer-container {
-            position: relative;
-            width: 150px;
-            height: 80px;
-            margin: 0 auto 3rem;
-            perspective: 1000px;
-        }
-        
-        /* Moodometer */
-        .moodometer {
-            width: 100%;
-            height: 100%;
-            position: relative;
             overflow: hidden;
-            border-radius: 175px 175px 0 0;
-            box-shadow: 0 15px 35px rgba(31, 38, 135, 0.2);
-            transform-style: preserve-3d;
-            transform: rotateX(10deg);
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(5px);
         }
-        
-        /* Moodometer Colors */
-        .mood-color {
-            position: absolute;
-            width: 16.66%;
-            height: 100%;
-            transform-origin: bottom center;
-            transition: all 0.3s ease;
-        }
-        
-        .mood-color:hover {
-            transform: scaleY(1.05);
-            filter: brightness(1.1);
-        }
-        
-        .color-violet {
-            left: 0;
-            background: linear-gradient(to top, #7e57c2, #9575cd);
-            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
-        }
-        
-        .color-blue {
-            left: 16.66%;
-            background: linear-gradient(to top, #42a5f5, #64b5f6);
-            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
-        }
-        
-        .color-green {
-            left: 33.33%;
-            background: linear-gradient(to top, #66bb6a, #81c784);
-            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
-        }
-        
-        .color-yellow {
-            left: 50%;
-            background: linear-gradient(to top, #ffee58, #fff176);
-            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
-        }
-        
-        .color-orange {
-            left: 66.66%;
-            background: linear-gradient(to top, #ffa726, #ffb74d);
-            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
-        }
-        
-        .color-red {
-            left: 83.33%;
-            background: linear-gradient(to top, #ef5350, #ef9a9a);
-            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5);
-        }
-        
-        /* Needle */
-        .needle-container {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 15px;
-            height: 40px;
-            z-index: 10;
-            transform-origin: bottom center;
-            transition: transform 1. cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        .needle {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px;
-            height: 80px;
-            background: linear-gradient(to top, #3f51b5, #5c6bc0);
-            border-radius: 6px 6px 0 0;
-            box-shadow: 0 0 15px rgba(63, 81, 181, 0.7);
-        }
-        
-        .needle::before {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 30px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-            border: 3px solid #5c6bc0;
-        }
-        
-        /* Controls */
-        .controls {
-            margin-top: 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            max-width: 400px;
-        }
-        
-        .mood-btn {
-            padding: 0.8rem 1.5rem;
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid rgba(92, 107, 192, 0.3);
-            color: #3f51b5;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(31, 38, 135, 0.1);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-        
-        .mood-btn::before {
+
+        .btn::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #5c6bc0, #7986cb);
-            z-index: -1;
-            transition: all 0.3s ease;
-            opacity: 0;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
         }
-        
-        .mood-btn:hover {
-            color: white;
+
+        .btn:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(63, 81, 181, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
-        
-        .mood-btn:hover::before {
-            opacity: 1;
+
+        .btn:active {
+            transform: translateY(-2px);
         }
-        
-        /* Three Small Divs */
-        .three-divs-container {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-top: 4rem;
-            width: 100%;
-            flex-wrap: wrap;
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
-        
-        .small-div {
-            width: 220px;
-            height: 130px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid rgba(92, 107, 192, 0.2);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 15px;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #3f51b5;
-            box-shadow: 0 10px 30px rgba(31, 38, 135, 0.15);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
+
+        .results-container {
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-        
-        .small-div::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #5c6bc0, #7986cb);
-            z-index: -1;
-            transition: all 0.4s ease;
-            opacity: 0;
-            transform: translateY(100%);
-        }
-        
-        .small-div:hover {
-            transform: translateY(-10px) rotateX(5deg);
-            box-shadow: 0 15px 35px rgba(63, 81, 181, 0.3);
-            color: white;
-        }
-        
-        .small-div:hover::before {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Footer */
-        footer {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 2rem 0;
-            box-shadow: 0 -8px 32px rgba(31, 38, 135, 0.15);
-            position: relative;
-            z-index: 10;
-            border-top: 1px solid rgba(255, 255, 255, 0.5);
-        }
-        
-        .footer-icons {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-        }
-        
-        .icon-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 10px;
-            border-radius: 15px;
-        }
-        
-        .icon-container:hover {
-            transform: translateY(-8px);
-            background: rgba(92, 107, 192, 0.1);
-        }
-        
-        .icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #5c6bc0, #7986cb);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-            box-shadow: 0 8px 20px rgba(63, 81, 181, 0.3);
-            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
-        
-        .icon::before {
+
+        .result-card::before {
             content: '';
             position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            animation: rotate 30s linear infinite;
+            z-index: -1;
+        }
+
+        .result-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #fff, #a8edea, #fed6e3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .score-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .score-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            min-width: 200px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .score-item:hover {
+            transform: translateY(-10px) rotateX(10deg);
+        }
+
+        .score-value {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #a8edea, #fed6e3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .result-description {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .personality-traits {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .trait {
+            background: linear-gradient(135deg, rgba(168, 237, 234, 0.3), rgba(254, 214, 227, 0.3));
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform-style: preserve-3d;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .trait:hover {
+            transform: translateY(-5px) rotateX(10deg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            position: absolute;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 1000;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+
+        .floating-shapes {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(0);
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float-shape 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
             border-radius: 50%;
-            transition: all 0.5s ease;
+            animation-duration: 25s;
         }
-        
-        .icon-container:hover .icon::before {
-            transform: scale(1);
+
+        .shape:nth-child(2) {
+            top: 60%;
+            left: 80%;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #fed6e3, #a8edea);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-duration: 30s;
         }
-        
-        .icon-container:hover .icon {
-            box-shadow: 0 12px 25px rgba(63, 81, 181, 0.5);
-            transform: rotate(10deg);
+
+        .shape:nth-child(3) {
+            top: 80%;
+            left: 20%;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            border-radius: 50%;
+            animation-duration: 35s;
         }
-        
-        .icon svg {
-            width: 30px;
-            height: 30px;
-            fill: #ffffff;
-            z-index: 1;
-            position: relative;
+
+        @keyframes float-shape {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
         }
-        
-        .icon-label {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            color: #3f51b5;
-            font-weight: 600;
-        }
-        
-        /* Responsive Design */
+
         @media (max-width: 768px) {
-            .navbar h1 {
-                font-size: 1.8rem;
+            .app-title {
+                font-size: 2.5rem;
             }
             
-            .bouncing-text {
-                font-size: 2rem;
-            }
-            
-            .moodometer-container {
-                width: 280px;
-                height: 140px;
-            }
-            
-            .needle {
-                height: 100px;
-            }
-            
-            .three-divs-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-            }
-            
-            .small-div {
-                width: 220px;
-                height: 120px;
-            }
-            
-            .footer-icons {
-                gap: 2rem;
-            }
-            
-            .icon {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .icon svg {
-                width: 24px;
-                height: 24px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .navbar {
-                padding: 1rem;
-            }
-            
-            .navbar h1 {
+            .question {
                 font-size: 1.5rem;
             }
             
-            .bouncing-text {
-                font-size: 1.7rem;
+            .score-container {
+                flex-direction: column;
+                align-items: center;
             }
             
-            .moodometer-container {
-                width: 240px;
-                height: 120px;
+            .btn-container {
+                flex-direction: column;
+                gap: 15px;
             }
             
-            .needle {
-                height: 80px;
-            }
-            
-            .controls {
-                gap: 0.8rem;
-            }
-            
-            .mood-btn {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.9rem;
-            }
-            
-            .small-div {
-                width: 200px;
-                height: 110px;
-                font-size: 1rem;
-            }
-            
-            .footer-icons {
-                gap: 1.5rem;
-            }
-            
-            .icon {
-                width: 45px;
-                height: 45px;
-            }
-            
-            .icon svg {
-                width: 22px;
-                height: 22px;
+            .btn {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 3D Background -->
-    <div class="bg-3d">
-        <div class="bg-3d-layer"></div>
-        <div class="floating-shape shape1"></div>
-        <div class="floating-shape shape2"></div>
-        <div class="floating-shape shape3"></div>
-        <div class="floating-shape shape4"></div>
+    <div class="stars" id="stars"></div>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
     </div>
-    
-    <nav class="navbar">
-        <h1>Aegis Welcomes you</h1>
-    </nav>
-    
-    <main class="main-content">
-        <h2 class="bouncing-text">How are YOU?</h2>
-        
-        <div class="moodometer-container">
-            <div class="moodometer">
-                <div class="mood-color color-violet"></div>
-                <div class="mood-color color-blue"></div>
-                <div class="mood-color color-green"></div>
-                <div class="mood-color color-yellow"></div>
-                <div class="mood-color color-orange"></div>
-                <div class="mood-color color-red"></div>
+
+    <div class="container">
+        <div class="app-header">
+            <div class="app-logo">
+                <i class="fas fa-brain"></i>
+                <h1 class="app-title">AEGIS</h1>
             </div>
-            <div class="needle-container" id="needle">
-                <div class="needle"></div>
+            <p class="app-subtitle">Let's get to know your glorious and amazing self.<br>
+                Take this quick test to join US!</br>
+            </p>
+        </div>
+
+        <div class="assessment-container">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+                <div class="progress-text" id="progressText">Question 1 of 10</div>
+            </div>
+
+            <div id="assessmentContent">
+                <!-- Question 1 -->
+                <div class="question-container active" data-question="1">
+                    <div class="question">If you were a superhero, what would your superpower be?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q1" value="introvert">
+                            <span>Mind reading - understanding others' thoughts</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="extrovert">
+                            <span>Super charisma - inspiring and leading others</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q1" value="ambivert">
+                            <span>Shape-shifting - adapting to any situation</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question-container" data-question="2">
+                    <div class="question">You're planning the ultimate adventure weekend. What's your ideal scenario?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q2" value="analytical">
+                            <span>Solving a complex escape room with puzzles</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="emotional">
+                            <span>A spontaneous road trip with no set destination</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q2" value="practical">
+                            <span>Organizing a group hiking expedition with detailed plans</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question-container" data-question="3">
+                    <div class="slider-label">How often do you check in with your emotions?</div>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="10" value="5" class="slider" id="emotionalAwareness">
+                        <div class="slider-labels">
+                            <span>Only when something's wrong</span>
+                            <span>Daily meditation</span>
+                            <span>Constantly throughout the day</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question-container" data-question="4">
+                    <div class="question">You're given a mysterious box with no instructions. What do you do?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q4" value="creative">
+                            <span>Imagine all the magical things it could contain</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="systematic">
+                            <span>Examine it carefully for clues and mechanisms</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q4" value="collaborative">
+                            <span>Gather friends to solve the mystery together</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question-container" data-question="5">
+                    <div class="question">What's your perfect way to recharge after a long week?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q5" value="solitude">
+                            <span>A quiet evening with a book and hot beverage</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="social">
+                            <span>A lively dinner party with close friends</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q5" value="activity">
+                            <span>An outdoor adventure or creative project</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question-container" data-question="6">
+                    <div class="slider-label">How do you react when someone gives you unexpected feedback?</div>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="10" value="5" class="slider" id="criticismHandling">
+                        <div class="slider-labels">
+                            <span>Feel defensive and upset</span>
+                            <span>Need time to process</span>
+                            <span>Immediately curious and grateful</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 7 -->
+                <div class="question-container" data-question="7">
+                    <div class="question">You find a magic lamp with a genie. What's your first wish?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q7" value="achievement">
+                            <span>Success and recognition in your career</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="relationships">
+                            <span>Deep, meaningful connections with others</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q7" value="growth">
+                            <span>Wisdom and continuous personal growth</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 8 -->
+                <div class="question-container" data-question="8">
+                    <div class="question">You're lost in a foreign city. How do you find your way?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q8" value="intuitive">
+                            <span>Follow your gut feeling and explore</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="analytical">
+                            <span>Study maps and plan the most efficient route</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q8" value="collaborative">
+                            <span>Ask locals for recommendations</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 9 -->
+                <div class="question-container" data-question="9">
+                    <div class="slider-label">How do you feel when plans change unexpectedly?</div>
+                    <div class="slider-container">
+                        <input type="range" min="1" max="10" value="5" class="slider" id="adaptability">
+                        <div class="slider-labels">
+                            <span>Anxious and frustrated</span>
+                            <span>Slightly annoyed but adaptable</span>
+                            <span>Excited for new possibilities</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question 10 -->
+                <div class="question-container" data-question="10">
+                    <div class="question">If you could time travel, which era would you visit?</div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q10" value="adventure">
+                            <span>The future to see technological advancements</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q10" value="relaxation">
+                            <span>A peaceful ancient civilization</span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q10" value="cultural">
+                            <span>The Renaissance to experience art and innovation</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="btn" id="prevBtn" disabled>Previous</button>
+                <button class="btn" id="nextBtn">Next</button>
             </div>
         </div>
-        
-        <div class="controls">
-            <button class="mood-btn" onclick="setMood(0)">Very Sad</button>
-            <button class="mood-btn" onclick="setMood(1)">Sad</button>
-            <button class="mood-btn" onclick="setMood(2)">Neutral</button>
-            <button class="mood-btn" onclick="setMood(3)">Happy</button>
-            <button class="mood-btn" onclick="setMood(4)">Very Happy</button>
-            <button class="mood-btn" onclick="setMood(5)">Ecstatic</button>
-        </div>
-        
-        <div class="three-divs-container">
-            <div class="small-div">Personality Trivia</div>
-            <div class="small-div">Your Emotional and mental quotient</div>
-            <div class="small-div">Get up closer to U</div>
-        </div>
-    </main>
-    
-    <footer>
-        <div class="footer-icons">
-            <div class="icon-container">
-                <div class="icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
+
+        <div class="results-container" id="resultsContainer">
+            <div class="result-card">
+                <h3 class="result-title">Your 3D Personality Analysis</h3>
+                <div class="score-container">
+                    <div class="score-item">
+                        <div class="score-value" id="mqScore">0</div>
+                        <div class="score-label">Mental Quotient</div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-value" id="eqScore">0</div>
+                        <div class="score-label">Emotional Quotient</div>
+                    </div>
                 </div>
-                <span class="icon-label">Profile</span>
+                <p class="result-description" id="resultDescription"></p>
+                <div class="personality-traits" id="personalityTraits"></div>
             </div>
-            <div class="icon-container">
-                <div class="icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
-                    </svg>
-                </div>
-                <span class="icon-label">AI Chatbot</span>
-            </div>
-            <div class="icon-container">
-                <div class="icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                    </svg>
-                </div>
-                <span class="icon-label">Community</span>
-            </div>
-            <div class="icon-container">
-                <div class="icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>
-                    </svg>
-                </div>
-                <span class="icon-label">Emergency</span>
+            <div class="btn-container">
+                <button class="btn" id="restartBtn">Take Assessment Again</button>
             </div>
         </div>
-    </footer>
-    
+
+        <div class="footer">
+            <p>Aegis - Bridging AI Empathy with Human Connection</p>
+            <p>© 2023 Team Aegis | Guru Nanak Dev University</p>
+        </div>
+    </div>
+
     <script>
-        function setMood(moodLevel) {
-            const needle = document.getElementById('needle');
-            // Calculate rotation angle (from -90deg to 90deg)
-            const rotation = -90 + (moodLevel * 30);
-            needle.style.transform = `translateX(-50%) rotate(${rotation}deg)`;
-            
-            // Add a pulse effect to the moodometer
-            const moodometer = document.querySelector('.moodometer');
-            moodometer.style.animation = 'pulse 0.5s';
-            setTimeout(() => {
-                moodometer.style.animation = '';
-            }, 500);
-        }
-        
-        // Set initial mood to neutral
-        setMood(2);
-        
-        // Add pulse animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes pulse {
-                0% { transform: rotateX(10deg) scale(1); }
-                50% { transform: rotateX(10deg) scale(1.05); }
-                100% { transform: rotateX(10deg) scale(1); }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create stars
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 3}s`;
+                starsContainer.appendChild(star);
             }
-        `;
-        document.head.appendChild(style);
+
+            // Assessment functionality
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const restartBtn = document.getElementById('restartBtn');
+            const progress = document.getElementById('progress');
+            const progressText = document.getElementById('progressText');
+            const assessmentContent = document.getElementById('assessmentContent');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const assessmentContainer = document.querySelector('.assessment-container');
+            
+            let currentQuestion = 1;
+            const totalQuestions = 10;
+            
+            // Add selection effect to options
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const radioInput = this.querySelector('input[type="radio"]');
+                    radioInput.checked = true;
+                    
+                    // Remove selected class from siblings
+                    const siblings = Array.from(this.parentNode.children);
+                    siblings.forEach(sibling => {
+                        if (sibling !== this) {
+                            sibling.classList.remove('selected');
+                        }
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Update progress bar
+            function updateProgress() {
+                const progressPercent = (currentQuestion / totalQuestions) * 100;
+                progress.style.width = `${progressPercent}%`;
+                progressText.textContent = `Question ${currentQuestion} of ${totalQuestions}`;
+            }
+            
+            // Show specific question
+            function showQuestion(questionNumber) {
+                const questionContainers = document.querySelectorAll('.question-container');
+                questionContainers.forEach(container => {
+                    container.classList.remove('active');
+                });
+                
+                const targetQuestion = document.querySelector(`.question-container[data-question="${questionNumber}"]`);
+                if (targetQuestion) {
+                    targetQuestion.classList.add('active');
+                }
+                
+                // Update button states
+                prevBtn.disabled = questionNumber === 1;
+                nextBtn.textContent = questionNumber === totalQuestions ? 'Analyze My Personality' : 'Next';
+                
+                updateProgress();
+            }
+            
+            // Next button click
+            nextBtn.addEventListener('click', function() {
+                if (currentQuestion < totalQuestions) {
+                    currentQuestion++;
+                    showQuestion(currentQuestion);
+                } else {
+                    // Calculate and show results
+                    calculateResults();
+                }
+            });
+            
+            // Previous button click
+            prevBtn.addEventListener('click', function() {
+                if (currentQuestion > 1) {
+                    currentQuestion--;
+                    showQuestion(currentQuestion);
+                }
+            });
+            
+            // Calculate results
+            function calculateResults() {
+                // Calculate scores based on answers
+                let mqScore = 0;
+                let eqScore = 0;
+                const traits = [];
+                
+                // Question 1: Superhero power
+                const q1 = document.querySelector('input[name="q1"]:checked');
+                if (q1) {
+                    if (q1.value === 'introvert') {
+                        mqScore += 8;
+                        eqScore += 6;
+                        traits.push('Insightful', 'Observant');
+                    } else if (q1.value === 'extrovert') {
+                        mqScore += 6;
+                        eqScore += 8;
+                        traits.push('Charismatic', 'Inspiring');
+                    } else {
+                        mqScore += 7;
+                        eqScore += 7;
+                        traits.push('Adaptable', 'Versatile');
+                    }
+                }
+                
+                // Question 2: Adventure weekend
+                const q2 = document.querySelector('input[name="q2"]:checked');
+                if (q2) {
+                    if (q2.value === 'analytical') {
+                        mqScore += 9;
+                        eqScore += 5;
+                        traits.push('Logical', 'Problem-solver');
+                    } else if (q2.value === 'emotional') {
+                        mqScore += 5;
+                        eqScore += 9;
+                        traits.push('Spontaneous', 'Free-spirited');
+                    } else {
+                        mqScore += 7;
+                        eqScore += 7;
+                        traits.push('Organized', 'Practical');
+                    }
+                }
+                
+                // Question 3: Emotional awareness
+                const emotionalAwareness = document.getElementById('emotionalAwareness').value;
+                eqScore += parseInt(emotionalAwareness);
+                if (emotionalAwareness >= 8) {
+                    traits.push('Self-aware', 'Mindful');
+                } else if (emotionalAwareness >= 5) {
+                    traits.push('Reflective');
+                }
+                
+                // Question 4: Mysterious box
+                const q4 = document.querySelector('input[name="q4"]:checked');
+                if (q4) {
+                    if (q4.value === 'creative') {
+                        mqScore += 8;
+                        eqScore += 6;
+                        traits.push('Imaginative', 'Creative');
+                    } else if (q4.value === 'systematic') {
+                        mqScore += 9;
+                        eqScore += 5;
+                        traits.push('Methodical', 'Detail-oriented');
+                    } else {
+                        mqScore += 7;
+                        eqScore += 8;
+                        traits.push('Collaborative', 'Team-player');
+                    }
+                }
+                
+                // Question 5: Recharging
+                const q5 = document.querySelector('input[name="q5"]:checked');
+                if (q5) {
+                    if (q5.value === 'solitude') {
+                        mqScore += 8;
+                        eqScore += 7;
+                        traits.push('Introspective', 'Calm');
+                    } else if (q5.value === 'social') {
+                        mqScore += 6;
+                        eqScore += 8;
+                        traits.push('Sociable', 'People-oriented');
+                    } else {
+                        mqScore += 7;
+                        eqScore += 7;
+                        traits.push('Active', 'Dynamic');
+                    }
+                }
+                
+                // Question 6: Criticism handling
+                const criticismHandling = document.getElementById('criticismHandling').value;
+                eqScore += parseInt(criticismHandling);
+                if (criticismHandling >= 8) {
+                    traits.push('Resilient', 'Open-minded');
+                } else if (criticismHandling >= 5) {
+                    traits.push('Receptive');
+                }
+                
+                // Question 7: Genie wish
+                const q7 = document.querySelector('input[name="q7"]:checked');
+                if (q7) {
+                    if (q7.value === 'achievement') {
+                        mqScore += 8;
+                        eqScore += 6;
+                        traits.push('Ambitious', 'Goal-oriented');
+                    } else if (q7.value === 'relationships') {
+                        mqScore += 6;
+                        eqScore += 9;
+                        traits.push('Compassionate', 'Relationship-focused');
+                    } else {
+                        mqScore += 8;
+                        eqScore += 7;
+                        traits.push('Curious', 'Growth-minded');
+                    }
+                }
+                
+                // Question 8: Lost in city
+                const q8 = document.querySelector('input[name="q8"]:checked');
+                if (q8) {
+                    if (q8.value === 'intuitive') {
+                        mqScore += 6;
+                        eqScore += 8;
+                        traits.push('Intuitive', 'Instinctive');
+                    } else if (q8.value === 'analytical') {
+                        mqScore += 9;
+                        eqScore += 6;
+                        traits.push('Analytical', 'Strategic');
+                    } else {
+                        mqScore += 7;
+                        eqScore += 8;
+                        traits.push('Consultative', 'People-smart');
+                    }
+                }
+                
+                // Question 9: Adaptability
+                const adaptability = document.getElementById('adaptability').value;
+                mqScore += parseInt(adaptability);
+                eqScore += parseInt(adaptability);
+                if (adaptability >= 8) {
+                    traits.push('Adaptable', 'Flexible');
+                } else if (adaptability >= 5) {
+                    traits.push('Resilient');
+                }
+                
+                // Question 10: Time travel
+                const q10 = document.querySelector('input[name="q10"]:checked');
+                if (q10) {
+                    if (q10.value === 'adventure') {
+                        mqScore += 7;
+                        eqScore += 7;
+                        traits.push('Forward-thinking', 'Innovative');
+                    } else if (q10.value === 'relaxation') {
+                        mqScore += 6;
+                        eqScore += 8;
+                        traits.push('Peaceful', 'Nature-loving');
+                    } else {
+                        mqScore += 8;
+                        eqScore += 7;
+                        traits.push('Cultured', 'Curious');
+                    }
+                }
+                
+                // Normalize scores to 0-100 scale
+                mqScore = Math.min(100, Math.round(mqScore * 1.2));
+                eqScore = Math.min(100, Math.round(eqScore * 1.2));
+                
+                // Generate description based on scores
+                let description = "";
+                if (mqScore >= 80 && eqScore >= 80) {
+                    description = "Wow! You possess an exceptional balance of mental and emotional intelligence. You navigate life's challenges with both analytical precision and emotional depth. Your ability to understand complex situations while maintaining empathy makes you a rare and valuable individual. People are drawn to your wisdom and compassion.";
+                } else if (mqScore >= 80) {
+                    description = "Your mental intelligence is truly impressive! You excel at logical thinking, problem-solving, and strategic planning. Your analytical mind allows you to break down complex issues and find effective solutions. Consider further developing your emotional intelligence to enhance your interpersonal relationships and communication skills even more.";
+                } else if (eqScore >= 80) {
+                    description = "Your emotional intelligence shines brightly! You have a remarkable ability to understand and manage emotions, both yours and others'. Your empathy and self-awareness make you an excellent friend and team member. Consider further developing your analytical skills to complement your emotional strengths and create an even more balanced approach to life's challenges.";
+                } else {
+                    description = "You have a well-rounded personality with balanced mental and emotional intelligence. You possess a unique blend of analytical thinking and emotional awareness that serves you well in various situations. Continue nurturing both aspects of your intelligence to unlock your full potential and become even more effective in navigating life's complexities.";
+                }
+                
+                // Display results
+                document.getElementById('mqScore').textContent = mqScore;
+                document.getElementById('eqScore').textContent = eqScore;
+                document.getElementById('resultDescription').textContent = description;
+                
+                // Display personality traits
+                const personalityTraitsEl = document.getElementById('personalityTraits');
+                personalityTraitsEl.innerHTML = '';
+                const uniqueTraits = [...new Set(traits)];
+                uniqueTraits.forEach(trait => {
+                    const traitEl = document.createElement('div');
+                    traitEl.className = 'trait';
+                    traitEl.textContent = trait;
+                    personalityTraitsEl.appendChild(traitEl);
+                });
+                
+                // Create confetti effect
+                createConfetti();
+                
+                // Hide assessment and show results
+                assessmentContainer.style.display = 'none';
+                resultsContainer.style.display = 'block';
+            }
+            
+            // Create confetti effect
+            function createConfetti() {
+                const colors = ['#a8edea', '#fed6e3', '#d299c2', '#fef9d7', '#edf2f7'];
+                
+                for (let i = 0; i < 100; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.left = `${Math.random() * 100}%`;
+                        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.width = `${Math.random() * 10 + 5}px`;
+                        confetti.style.height = confetti.style.width;
+                        confetti.style.opacity = Math.random();
+                        document.body.appendChild(confetti);
+                        
+                        setTimeout(() => {
+                            confetti.remove();
+                        }, 3000);
+                    }, i * 30);
+                }
+            }
+            
+            // Restart assessment
+            restartBtn.addEventListener('click', function() {
+                currentQuestion = 1;
+                showQuestion(currentQuestion);
+                
+                // Reset all selections
+                document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.checked = false;
+                });
+                document.querySelectorAll('.option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                document.querySelectorAll('.slider').forEach(slider => {
+                    slider.value = 5;
+                });
+                
+                // Show assessment and hide results
+                assessmentContainer.style.display = 'block';
+                resultsContainer.style.display = 'none';
+            });
+            
+            // Initialize
+            showQuestion(currentQuestion);
+        });
     </script>
 </body>
 </html>
