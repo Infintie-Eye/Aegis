@@ -508,83 +508,6 @@
             transform-style: preserve-3d;
         }
 
-        /* Resources Section */
-        .resources-section {
-            margin-top: 30px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .resources-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .resources-icon {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-right: 15px;
-        }
-
-        .resources-title {
-            font-size: 1.3rem;
-            color: var(--dark-color);
-            font-weight: 600;
-        }
-
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .resource-card {
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .resource-card:hover {
-            background: rgba(255, 255, 255, 0.8);
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .resource-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            margin-right: 15px;
-        }
-
-        .resource-info {
-            flex-grow: 1;
-        }
-
-        .resource-title {
-            font-weight: 600;
-            color: var(--dark-color);
-            margin-bottom: 3px;
-        }
-
-        .resource-description {
-            font-size: 0.8rem;
-            color: #666;
-        }
-
         /* Notification Badge */
         .notification-badge {
             position: absolute;
@@ -934,54 +857,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Resources Section -->
-        <div class="resources-section">
-            <div class="resources-header">
-                <div class="resources-icon">
-                    <i class="fas fa-book"></i>
-                </div>
-                <div class="resources-title">Helpful Resources</div>
-            </div>
-            <div class="resources-grid">
-                <div class="resource-card">
-                    <div class="resource-icon">
-                        <i class="fas fa-headphones"></i>
-                    </div>
-                    <div class="resource-info">
-                        <div class="resource-title">Guided Meditation</div>
-                        <div class="resource-description">Mindfulness exercises for mental wellness</div>
-                    </div>
-                </div>
-                <div class="resource-card">
-                    <div class="resource-icon">
-                        <i class="fas fa-book-open"></i>
-                    </div>
-                    <div class="resource-info">
-                        <div class="resource-title">Coping Strategies</div>
-                        <div class="resource-description">Practical techniques for difficult days</div>
-                    </div>
-                </div>
-                <div class="resource-card">
-                    <div class="resource-icon">
-                        <i class="fas fa-user-md"></i>
-                    </div>
-                    <div class="resource-info">
-                        <div class="resource-title">Professional Help</div>
-                        <div class="resource-description">Find therapists and counselors</div>
-                    </div>
-                </div>
-                <div class="resource-card">
-                    <div class="resource-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div class="resource-info">
-                        <div class="resource-title">Support Groups</div>
-                        <div class="resource-description">Local and virtual meeting options</div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </main>
 
     <script>
@@ -1158,17 +1033,6 @@
                     
                     // Add background to clicked item
                     this.style.background = 'rgba(106, 90, 205, 0.1)';
-                });
-            });
-            
-            // Resource card interaction
-            const resourceCards = document.querySelectorAll('.resource-card');
-            
-            resourceCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const title = this.querySelector('.resource-title').textContent;
-                    console.log(`Opening ${title} resource`);
-                    // Here you would typically open the resource
                 });
             });
         });

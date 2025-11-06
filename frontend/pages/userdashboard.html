@@ -1,24 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Your Page Title</title>
-    
     <title>Aegis - Mental Resilience Dashboard</title>
-     <link rel="stylesheet" href="../css/navbar.css">
-    <link rel="stylesheet" href="styles/main.css"> <!-- Your existing styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="scripts/navbar.js"></script>
-    
-     
     <style>
-
         :root {
             --primary: #4a6bdf;
             --secondary: #6c63ff;
@@ -49,22 +38,115 @@
             min-height: 100vh;
         }
 
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--dark) 0%, #1a1f3a 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo i {
+            font-size: 28px;
+            color: var(--accent);
+            margin-right: 12px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--accent);
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .user-profile {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        .user-info h4 {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .user-info p {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
         /* Main Content */
         .main-content {
+            margin-left: 260px;
             flex: 1;
             padding: 30px;
         }
 
         .header {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            gap: 80px;
         }
 
         .header h2 {
-            font-size: 50px;
+            font-size: 38px;
             color: var(--dark);
         }
 
@@ -414,102 +496,21 @@
             color: #777;
         }
 
-        /* Projects Section */
-        .projects-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            padding: 25px;
-        }
-
-        .project-list {
-            list-style: none;
-        }
-
-        .project-item {
-            padding: 15px 0;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-        }
-
-        .project-item:last-child {
-            border-bottom: none;
-        }
-
-        .project-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            color: white;
-        }
-
-        .project-icon.blue {
-            background: var(--primary);
-        }
-
-        .project-icon.purple {
-            background: var(--secondary);
-        }
-
-        .project-icon.pink {
-            background: var(--accent);
-        }
-
-        .project-info {
-            flex: 1;
-        }
-
-        .project-info h4 {
-            font-size: 16px;
-            margin-bottom: 3px;
-        }
-
-        .project-info p {
-            font-size: 13px;
-            color: #777;
-        }
-
-        .project-progress {
-            width: 100px;
-            margin-right: 15px;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: #f0f0f0;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 4px;
-        }
-
-        .progress-fill.blue {
-            background: var(--primary);
-        }
-
-        .progress-fill.purple {
-            background: var(--secondary);
-        }
-
-        .progress-fill.pink {
-            background: var(--accent);
-        }
-
-        .project-percentage {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
         /* Responsive */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .logo h1, .nav-item span, .user-info {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+
         @media (max-width: 768px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
@@ -526,16 +527,44 @@
     </style>
 </head>
 <body>
-    <!-- Include navbar -->
-    <div id="navbar-container"></div>
-    
-    <!-- Mobile menu toggle (for responsive design) -->
-    <button class="mobile-menu-toggle">☰</button>
-    
-    <!-- Main content -->
-    <div class="main-content">
-        <!-- Your page content here -->
-    </div>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>Aegis<span>.</span></h1>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item active">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Companion</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Community</span>
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </li>
+            </ul>
+            
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-info">
+                    <h4>Alex Johnson</h4>
+                    <p>Premium User</p>
+                </div>
+            </div>
+        </div>
+        
         <!-- Main Content -->
         <div class="main-content">
             <div class="header">
@@ -745,93 +774,10 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Projects Section -->
-            <div class="feature-section">
-                <h3 class="section-title"><i class="fas fa-tasks"></i> Community Based Projects</h3>
-                
-                <div class="projects-container">
-                    <ul class="project-list">
-                        <li class="project-item">
-                            <div class="project-icon blue">
-                                <i class="fas fa-brain"></i>
-                            </div>
-                            <div class="project-info">
-                                <h4>Mindfulness Challenge</h4>
-                                <p>30-day mindfulness and meditation program</p>
-                            </div>
-                            <div class="project-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill blue" style="width: 75%;"></div>
-                                </div>
-                            </div>
-                            <div class="project-percentage">75%</div>
-                        </li>
-                        
-                        <li class="project-item">
-                            <div class="project-icon purple">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="project-info">
-                                <h4>Peer Support Network</h4>
-                                <p>Building connections within the community</p>
-                            </div>
-                            <div class="project-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill purple" style="width: 60%;"></div>
-                                </div>
-                            </div>
-                            <div class="project-percentage">60%</div>
-                        </li>
-                        
-                        <li class="project-item">
-                            <div class="project-icon pink">
-                                <i class="fas fa-heart"></i>
-                            </div>
-                            <div class="project-info">
-                                <h4>Emotional Awareness Campaign</h4>
-                                <p>Raising awareness about mental health</p>
-                            </div>
-                            <div class="project-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill pink" style="width: 90%;"></div>
-                                </div>
-                            </div>
-                            <div class="project-percentage">90%</div>
-                        </li>
-                        
-                        <li class="project-item">
-                            <div class="project-icon blue">
-                                <i class="fas fa-book"></i>
-                            </div>
-                            <div class="project-info">
-                                <h4>Resilience Building Workshop</h4>
-                                <p>Weekly workshops on building mental resilience</p>
-                            </div>
-                            <div class="project-progress">
-                                <div class="progress-bar">
-                                    <div class="progress-fill blue" style="width: 45%;"></div>
-                                </div>
-                            </div>
-                            <div class="project-percentage">45%</div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
-    </div> 
-    
-    
-    <script>
+    </div>
 
-    
-          // Load navbar
-        fetch('navbar.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('navbar-container').innerHTML = data;
-            });
-    
+    <script>
         // Initialize 3D Graphics
         function init3D() {
             const container = document.getElementById('three-container');
@@ -1078,6 +1024,15 @@
         document.addEventListener('DOMContentLoaded', function() {
             init3D();
             initCharts();
+            
+            // Add interactivity to nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
         });
     </script>
 </body>
