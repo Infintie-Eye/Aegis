@@ -431,6 +431,7 @@
             display: flex;
             align-items: center;
             margin-bottom: 15px;
+            position: relative;
         }
 
         .progress-bar {
@@ -440,12 +441,51 @@
             border-radius: 4px;
             overflow: hidden;
             margin-right: 10px;
+            position: relative;
+        }
+
+        .progress-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: transparent;
+            outline: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .progress-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+            margin-top: -5px;
+        }
+
+        .progress-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
         }
 
         .progress-fill {
             height: 100%;
             border-radius: 4px;
             background: var(--primary);
+            pointer-events: none;
         }
 
         /* Responsive */
@@ -670,8 +710,10 @@
                             
                             <div class="project-progress">
                                 <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 75%;"></div>
+                                    <div class="progress-fill" style="width: 0%;"></div>
+                                    <input type="range" class="progress-slider" value="0" min="0" max="100" data-project="mindfulness">
                                 </div>
+                                <span class="progress-value">0%</span>
                                 <span>75%</span>
                             </div>
                         </div>
@@ -687,9 +729,10 @@
                             
                             <div class="project-progress">
                                 <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 60%;"></div>
+                                    <div class="progress-fill" style="width: 0%;"></div>
+                                    <input type="range" class="progress-slider" value="0" min="0" max="100" data-project="gardening">
                                 </div>
-                                <span>60%</span>
+                                <span class="progress-value">0%</span>
                             </div>
                         </div>
                     </div>
@@ -704,9 +747,10 @@
                             
                             <div class="project-progress">
                                 <div class="progress-bar">
-                                    <div class="progress-fill" style="width: 90%;"></div>
+                                    <div class="progress-fill" style="width: 0%;"></div>
+                                    <input type="range" class="progress-slider" value="0" min="0" max="100" data-project="fitness">
                                 </div>
-                                <span>90%</span>
+                                <span class="progress-value">0%</span>
                             </div>
                         </div>
                     </div>
@@ -878,6 +922,21 @@
                         }
                     }
                 }
+            });
+            
+            // Handle Progress Sliders
+            document.querySelectorAll('.progress-slider').forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const progressFill = this.parentElement.querySelector('.progress-fill');
+                    const progressValue = this.parentElement.parentElement.querySelector('.progress-value');
+                    const value = this.value;
+                    
+                    progressFill.style.width = `${value}%`;
+                    progressValue.textContent = `${value}%`;
+                    
+                    // You can add code here to save the progress to your backend
+                    console.log(`Progress updated for ${this.dataset.project}: ${value}%`);
+                });
             });
             
             // Projects Chart
