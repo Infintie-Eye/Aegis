@@ -840,9 +840,16 @@
                 </div>
                 <p class="result-description" id="resultDescription"></p>
                 <div class="personality-traits" id="personalityTraits"></div>
+                <div class="redirect-notice" id="redirectNotice"
+                     style="margin-top: 30px; text-align: center; font-size: 1.1rem; color: rgba(255, 255, 255, 0.8);">
+                    Redirecting to your dashboard in <span id="countdown">30</span> seconds...
+                </div>
             </div>
             <div class="btn-container">
                 <button class="btn" id="restartBtn">Take Assessment Again</button>
+                <button class="btn" id="skipBtn" style="background: linear-gradient(135deg, #fed6e3, #a8edea);">Go to
+                    Dashboard Now
+                </button>
             </div>
         </div>
 
@@ -1142,6 +1149,23 @@
                 // Hide assessment and show results
                 assessmentContainer.style.display = 'none';
                 resultsContainer.style.display = 'block';
+
+                let countdown = 30;
+                document.getElementById('countdown').textContent = countdown;
+
+                const intervalId = setInterval(() => {
+                    countdown--;
+                    document.getElementById('countdown').textContent = countdown;
+                    if (countdown === 0) {
+                        clearInterval(intervalId);
+                        window.location.href = "/pages/userdashboard.html";
+                    }
+                }, 1000);
+
+                document.getElementById('skipBtn').addEventListener('click', function () {
+                    clearInterval(intervalId);
+                    window.location.href = "/pages/userdashboard.html";
+                });
             }
             
             // Create confetti effect

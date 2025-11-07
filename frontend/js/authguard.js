@@ -11,6 +11,7 @@ const path = window.location.pathname.toLowerCase();
 const publicPaths = ["/", "/index.html", "/pages/login.html", "/pages/sign_up.html"];
 const isPublic = publicPaths.includes(path);
 const isWaiting = path.endsWith("/pages/waiting.html") || path.endsWith("/waiting.html");
+const isAnalysis = path.endsWith("/pages/analysis.html") || path.endsWith("/analysis.html");
 
 // Main guard
 onAuthStateChanged(auth, async (user) => {
@@ -59,7 +60,17 @@ onAuthStateChanged(auth, async (user) => {
     return; // allow waiting page for unverified users
   }
 
-  // PROTECTED PAGES (everything else)
+    // ANALYSIS PAGE (must be logged in; can be unverified)
+    if (isAnalysis) {
+        if (!user) {
+            window.location.replace("/pages/sign_up.html");
+            return;
+        }
+        // Allow any logged-in user (verified or not) to access analysis page
+        return;
+    }
+
+    // PROTECTED PAGES (everything else)
   if (!user) {
     window.location.replace("/pages/login.html");
     return;

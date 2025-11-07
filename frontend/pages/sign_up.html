@@ -462,9 +462,9 @@ signupForm.addEventListener('submit', async (e) => {
 
         showNotification('Verification email sent! Redirecting...', 'success');
 
-        // Redirect to waiting page where they can resend/check verification
+        // Redirect to analysis page for personality test
         setTimeout(() => {
-            window.location.href = "/pages/waiting.html";
+            window.location.href = "/pages/analysis.html";
         }, 1500);
 
     } catch (err) {
