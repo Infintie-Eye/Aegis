@@ -1,6 +1,13 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime, timedelta
 import random
+from typing import TypedDict
+
+class MoodEntry(TypedDict):
+    timestamp: str
+    mood: str
+    intensity: int
+    notes: str
 
 bp = Blueprint('analysis', __name__, url_prefix='/api/analysis')
 
@@ -20,12 +27,12 @@ def track_mood():
         intensity = data.get('intensity', 5)
         notes = data.get('notes', '')
 
-        if not mood:
-            return jsonify({'error': 'Mood is required'}), 400
-
-        # Store mood data
-        if user_id not in mood_data:
-            mood_data[user_id] = []
+        mood_entry: MoodEntry = {
+            'timestamp': datetime.now(datetime.timezone.utc).isoformat(),
+            'mood': mood,
+            'intensity': intensity,
+            'notes': notes
+        }
 
         mood_entry = {
             'timestamp': datetime.utcnow().isoformat(),
