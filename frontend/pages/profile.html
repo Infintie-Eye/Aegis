@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aegis - User Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../css/sidebar.css">
     <style>
         * {
             margin: 0;
@@ -376,6 +375,57 @@
             color: var(--primary);
         }
 
+        .notification.on-top {
+            z-index: 99999; /* ensure toast is above modal/backdrop */
+        }
+
+        /* Modal for reauthentication/password change */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(2,6,23,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1200;
+            padding: 20px;
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 12px 40px rgba(2,6,23,0.2);
+        }
+
+        .modal h3 {
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+
+        .modal .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .modal .input-group {
+            margin-bottom: 12px;
+        }
+
+        .modal .help {
+            font-size: 13px;
+            color: #475569;
+            margin-top: 6px;
+        }
+
         @media (max-width: 768px) {
             .profile-container {
                 grid-template-columns: 1fr;
@@ -392,8 +442,6 @@
             }
         }
     </style>
-    <script type="module" src="/frontend/js/firebase.js"></script>
-    <script type="module" src="../js/authguard.js"></script>
 </head>
 <body>
     <div class="floating-shapes">
@@ -404,10 +452,6 @@
     </div>
 
     <div class="container">
-<<<<<<< HEAD
-        <!-- Sidebar -->
-        <div id="sidebar-container"></div>
-=======
         <header>
             <div class="logo">
                 <i class="fas fa-shield-alt"></i>
@@ -415,7 +459,6 @@
             </div>
             <p class="tagline">Bridging AI Empathy with Human Connection</p>
         </header>
->>>>>>> 4074c9db594f6e38e81fe2e40df89fb8d601e703
 
         <div class="profile-container">
             <div class="profile-card">
@@ -483,7 +526,7 @@
 
                 <form id="profileForm">
                     <div class="form-group">
-                        <label for="name">Full Name</label>
+                        <label for="name"> Username</label>
                         <input type="text" id="name" class="form-control" value="Alex Johnson" disabled>
                     </div>
 
@@ -521,7 +564,35 @@
         <span id="notificationText">Profile updated successfully!</span>
     </div>
 
-    <script>
+    <!-- Password change / reauth modal -->
+    <div class="modal-backdrop" id="reauthModal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="reauthTitle">
+            <h3 id="reauthTitle">Change Password</h3>
+            <div class="input-group">
+                <label for="reauthCurrent">Current password</label>
+                <input id="reauthCurrent" type="password" class="form-control" autocomplete="current-password">
+            </div>
+            <div class="input-group">
+                <label for="reauthNew">New password</label>
+                <input id="reauthNew" type="password" class="form-control" autocomplete="new-password">
+                <div class="help">Minimum 8 characters.</div>
+            </div>
+            <div class="input-group">
+                <label for="reauthConfirm">Confirm new password</label>
+                <input id="reauthConfirm" type="password" class="form-control" autocomplete="new-password">
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="reauthCancel">Cancel</button>
+                <button type="button" class="btn btn-primary" id="reauthSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db, onAuthStateChanged } from '../js/firebase.js';
+        import { doc, getDoc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
+        import { updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
+
         document.addEventListener('DOMContentLoaded', function() {
             const editBtn = document.getElementById('editBtn');
             const cancelBtn = document.getElementById('cancelBtn');
@@ -542,90 +613,341 @@
             const userAvatar = document.getElementById('userAvatar');
             
             let isEditMode = false;
-            
+            let currentUser = null;
+
+            // Local generator for a friendly random username (kept in sync with chat.js)
+            function generateAnonymousName() {
+                const adjectives = ['Anonymous', 'Silent', 'Hopeful', 'Peaceful', 'Kind', 'Gentle', 'Brave', 'Calm', 'Serene', 'Quiet'];
+                const nouns = ['Soul', 'Heart', 'Spirit', 'Mind', 'Voice', 'Light', 'Star', 'Moon', 'Cloud', 'River', 'Wave', 'Dream'];
+                const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+                const noun = nouns[Math.floor(Math.random() * nouns.length)];
+                return `${adjective} ${noun}`;
+            }
+
+            // Add a change-password button (only shown in edit mode)
+            const changePasswordBtn = document.createElement('button');
+            changePasswordBtn.type = 'button';
+            changePasswordBtn.className = 'btn btn-secondary';
+            changePasswordBtn.id = 'changePasswordBtn';
+            changePasswordBtn.textContent = 'Change Password';
+            changePasswordBtn.style.display = 'none';
+            // place it next to the password input
+            passwordInput.parentNode.appendChild(changePasswordBtn);
+
+            // Watch auth state and prefill form from Firestore + Auth
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    // not signed in -> go to login
+                    window.location.href = '/pages/login.html';
+                    return;
+                }
+                currentUser = user;
+
+                // Prefill from auth
+                displayEmail.textContent = user.email || '';
+                emailInput.value = user.email || '';
+
+                // Try to load user profile from Firestore
+                try {
+                    const uref = doc(db, 'users', user.uid);
+                    const snap = await getDoc(uref);
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        if (data.name) {
+                            nameInput.value = data.name;
+                            displayName.textContent = data.name;
+                        }
+                        if (data.gender) genderInput.value = data.gender;
+                        if (data.avatar) {
+                            // mark active avatar
+                            avatarOptions.forEach(opt => {
+                                opt.classList.toggle('active', opt.getAttribute('data-avatar') === data.avatar);
+                                if (opt.classList.contains('active')) {
+                                    userAvatar.innerHTML = `<i class="fas ${data.avatar}"></i>`;
+                                }
+                            });
+                        } else if (data.initials) {
+                            // show initials if provided
+                            userAvatar.textContent = data.initials;
+                            userAvatar.style.fontSize = '36px';
+                            userAvatar.style.fontWeight = '700';
+                            userAvatar.style.color = 'white';
+                        } else if (data.name) {
+                            const initials = getInitials(data.name);
+                            userAvatar.textContent = initials;
+                            userAvatar.style.fontSize = '36px';
+                            userAvatar.style.fontWeight = '700';
+                            userAvatar.style.color = 'white';
+                        } else {
+                            // No avatar/initials/name set: create a friendly random username and persist it
+                            const generated = generateAnonymousName();
+                            nameInput.value = generated;
+                            displayName.textContent = generated;
+                            const initials = getInitials(generated);
+                            userAvatar.textContent = initials;
+                            userAvatar.style.fontSize = '36px';
+                            userAvatar.style.fontWeight = '700';
+                            userAvatar.style.color = 'white';
+                            try {
+                                await setDoc(uref, {
+                                    name: generated,
+                                    displayName: generated,
+                                    initials: initials,
+                                    createdAt: serverTimestamp()
+                                }, { merge: true });
+                            } catch (err) {
+                                console.warn('Failed to persist generated username on profile load', err);
+                            }
+                        }
+                    } else {
+                        // no doc yet: set some defaults from auth
+                        if (user.displayName) {
+                            nameInput.value = user.displayName;
+                            displayName.textContent = user.displayName;
+                            // show initials from auth displayName
+                            const initials = getInitials(user.displayName);
+                            userAvatar.textContent = initials;
+                            userAvatar.style.fontSize = '36px';
+                            userAvatar.style.fontWeight = '700';
+                            userAvatar.style.color = 'white';
+                            try {
+                                // persist a minimal profile so future loads are consistent
+                                await setDoc(uref, {
+                                    name: user.displayName,
+                                    displayName: user.displayName,
+                                    initials: initials,
+                                    email: user.email || null,
+                                    createdAt: serverTimestamp()
+                                }, { merge: true });
+                            } catch (err) {
+                                console.warn('Failed to persist auth defaults on profile load', err);
+                            }
+                        } else {
+                            // no auth displayName: create generated username now
+                            const generated = generateAnonymousName();
+                            nameInput.value = generated;
+                            displayName.textContent = generated;
+                            const initials = getInitials(generated);
+                            userAvatar.textContent = initials;
+                            userAvatar.style.fontSize = '36px';
+                            userAvatar.style.fontWeight = '700';
+                            userAvatar.style.color = 'white';
+                            try {
+                                await setDoc(uref, {
+                                    name: generated,
+                                    displayName: generated,
+                                    initials: initials,
+                                    email: user.email || null,
+                                    createdAt: serverTimestamp()
+                                }, { merge: true });
+                            } catch (err) {
+                                console.warn('Failed to persist generated username on profile creation', err);
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.error('Error loading profile:', err);
+                }
+            });
+
             // Toggle edit mode
             editBtn.addEventListener('click', function() {
-                isEditMode = true;
-                
-                // Enable form inputs
-                nameInput.disabled = false;
-                emailInput.disabled = false;
-                genderInput.disabled = false;
-                passwordInput.disabled = false;
-                
-                // Show form actions
-                formActions.style.display = 'flex';
-                
-                // Change edit button text
-                editBtn.innerHTML = '<i class="fas fa-times"></i><span>Cancel Editing</span>';
+                isEditMode = !isEditMode;
+                if (isEditMode) {
+                    // Enable form inputs
+                    nameInput.disabled = false;
+                    emailInput.disabled = false;
+                    genderInput.disabled = false;
+                    passwordInput.disabled = false;
+                    changePasswordBtn.style.display = 'inline-block';
+
+                    // Show form actions
+                    formActions.style.display = 'flex';
+
+                    // Change edit button text
+                    editBtn.innerHTML = '<i class="fas fa-times"></i><span>Cancel Editing</span>';
+                } else {
+                    resetForm();
+                }
             });
-            
+
             // Cancel editing
             cancelBtn.addEventListener('click', function() {
                 resetForm();
             });
-            
+
             // Handle form submission
-            profileForm.addEventListener('submit', function(e) {
+            profileForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
-                // Update display values
-                displayName.textContent = nameInput.value;
-                displayEmail.textContent = emailInput.value;
-                
-                // Show notification
-                showNotification('Profile updated successfully!');
-                
-                // Reset form
-                resetForm();
+                if (!currentUser) {
+                    showNotification('No authenticated user.');
+                    return;
+                }
+
+                const uid = currentUser.uid;
+                const name = nameInput.value.trim();
+                const newEmail = emailInput.value.trim();
+                const gender = genderInput.value;
+                const activeAvatar = Array.from(avatarOptions).find(opt => opt.classList.contains('active'))?.getAttribute('data-avatar') || null;
+
+                // If email changed, try to update auth email first (may require reauth)
+                try {
+                    if (newEmail && currentUser.email !== newEmail) {
+                        await updateEmail(currentUser, newEmail);
+                    }
+                } catch (err) {
+                    console.error('Failed to update email:', err);
+                    showNotification('Failed to update email. You may need to re-login to change email.');
+                    return;
+                }
+
+                // Persist profile fields to Firestore
+                try {
+                    const uref = doc(db, 'users', uid);
+                    const initials = getInitials(name || displayName.textContent || '');
+                    await setDoc(uref, {
+                        // persist both `name` (profile) and `displayName` for compatibility
+                        name: name || null,
+                        displayName: name || null,
+                        initials: initials || null,
+                        email: newEmail || null,
+                        gender: gender || null,
+                        avatar: activeAvatar || null,
+                        updatedAt: serverTimestamp()
+                    }, { merge: true });
+
+                    // Update display
+                    displayName.textContent = name || displayName.textContent;
+                    displayEmail.textContent = newEmail || displayEmail.textContent;
+
+                    showNotification('Profile updated successfully!');
+                    resetForm();
+                } catch (err) {
+                    console.error('Failed to save profile:', err);
+                    showNotification('Failed to save profile. Check console for details.');
+                }
             });
-            
+
             // Reset form to view mode
             function resetForm() {
                 isEditMode = false;
-                
+
                 // Disable form inputs
                 nameInput.disabled = true;
                 emailInput.disabled = true;
                 genderInput.disabled = true;
                 passwordInput.disabled = true;
-                
+                changePasswordBtn.style.display = 'none';
+
                 // Hide form actions
                 formActions.style.display = 'none';
-                
+
                 // Reset edit button
                 editBtn.innerHTML = '<i class="fas fa-edit"></i><span>Edit Profile</span>';
             }
-            
+
+            // Compute initials from a display name
+            function getInitials(name) {
+                if (!name) return '';
+                const parts = name.trim().split(/\s+/);
+                if (parts.length >= 2) {
+                    return (parts[0][0] + parts[1][0]).toUpperCase();
+                }
+                return name.substring(0, 2).toUpperCase();
+            }
+
             // Show notification
             function showNotification(message) {
                 notificationText.textContent = message;
                 notification.classList.add('show');
-                
+
                 setTimeout(() => {
                     notification.classList.remove('show');
                 }, 3000);
             }
-            
+
             // Handle avatar selection
             avatarOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     // Remove active class from all options
                     avatarOptions.forEach(opt => opt.classList.remove('active'));
-                    
+
                     // Add active class to clicked option
                     this.classList.add('active');
-                    
+
                     // Update avatar
                     const avatarClass = this.getAttribute('data-avatar');
                     userAvatar.innerHTML = `<i class="fas ${avatarClass}"></i>`;
-                    
-                    // Show notification
-                    showNotification('Avatar updated successfully!');
+
+                    // Show notification only in edit mode
+                    if (isEditMode) showNotification('Avatar updated (not yet saved).');
                 });
+            });
+
+            // Change password flow using modal reauthentication UI
+            const reauthModal = document.getElementById('reauthModal');
+            const reauthCurrent = document.getElementById('reauthCurrent');
+            const reauthNew = document.getElementById('reauthNew');
+            const reauthConfirm = document.getElementById('reauthConfirm');
+            const reauthCancel = document.getElementById('reauthCancel');
+            const reauthSave = document.getElementById('reauthSave');
+
+            function showReauthModal() {
+                reauthCurrent.value = '';
+                reauthNew.value = '';
+                reauthConfirm.value = '';
+                reauthModal.classList.add('show');
+                // bring notifications above the modal while reauth is shown
+                notification.classList.add('on-top');
+                setTimeout(() => reauthCurrent.focus(), 50);
+            }
+
+            function hideReauthModal() {
+                reauthModal.classList.remove('show');
+                notification.classList.remove('on-top');
+            }
+
+            changePasswordBtn.addEventListener('click', function() {
+                if (!currentUser) return showNotification('No authenticated user.');
+
+                // Only email/password users can reauthenticate this way
+                const hasPasswordProvider = currentUser.providerData.some(pd => pd.providerId === 'password');
+                if (!hasPasswordProvider) return showNotification('Password change is not available for social login providers.');
+
+                showReauthModal();
+            });
+
+            reauthCancel.addEventListener('click', function() {
+                hideReauthModal();
+            });
+
+            reauthSave.addEventListener('click', async function() {
+                if (!currentUser) return showNotification('No authenticated user.');
+                const current = reauthCurrent.value || '';
+                const next = reauthNew.value || '';
+                const confirm = reauthConfirm.value || '';
+
+                if (!current) return showNotification('Please enter your current password.');
+                if (!next || next.length < 8) return showNotification('New password must be at least 8 characters.');
+                if (next !== confirm) return showNotification('New password and confirmation do not match.');
+
+                reauthSave.disabled = true;
+                reauthCancel.disabled = true;
+                try {
+                    const credential = EmailAuthProvider.credential(currentUser.email, current);
+                    await reauthenticateWithCredential(currentUser, credential);
+                    await updatePassword(currentUser, next);
+                    showNotification('Password changed successfully.');
+                    hideReauthModal();
+                } catch (err) {
+                    console.error('Password change failed:', err);
+                    showNotification('Password change failed. Check your current password or re-login.');
+                } finally {
+                    reauthSave.disabled = false;
+                    reauthCancel.disabled = false;
+                }
             });
         });
     </script>
-    <script src="../js/sidebar.js"></script>
 </body>
 </html>

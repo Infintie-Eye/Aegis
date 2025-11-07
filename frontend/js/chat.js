@@ -54,8 +54,24 @@ class FirebaseChat {
         
         if (userSnap.exists()) {
             const userData = userSnap.data();
-            this.userDisplayName = userData.displayName || this.generateAnonymousName();
+            // Prefer a saved `name` (profile page), then `displayName` (auth/profile), then fallback
+            this.userDisplayName = userData.name || userData.displayName || (this.currentUser.displayName || (this.currentUser.email ? this.currentUser.email.split('@')[0] : this.generateAnonymousName()));
             this.userInitials = userData.initials || this.getInitials(this.userDisplayName);
+
+            // If the user doc exists but lacks a persistent name/displayName, persist the generated/fallback name so it remains stable
+            const needsPersist = !(userData.name || userData.displayName);
+            if (needsPersist) {
+                try {
+                    await setDoc(userRef, {
+                        name: this.userDisplayName,
+                        displayName: this.userDisplayName,
+                        initials: this.userInitials,
+                        updatedAt: serverTimestamp()
+                    }, { merge: true });
+                } catch (e) {
+                    console.warn('Failed to persist generated username for user', this.currentUser.uid, e);
+                }
+            }
         } else {
             // Create a profile appropriate to the auth state.
             const isAnon = !!this.currentUser.isAnonymous;
@@ -69,6 +85,8 @@ class FirebaseChat {
 
             await setDoc(userRef, {
                 email: this.currentUser.email || null,
+                // write both `name` and `displayName` for compatibility with profile page
+                name: this.userDisplayName,
                 displayName: this.userDisplayName,
                 initials: this.userInitials,
                 createdAt: serverTimestamp(),
@@ -161,7 +179,7 @@ class FirebaseChat {
     }
 
     displayMessage(messageData, messageId) {
-        const isOwn = this.currentUser && messageData.userId === this.currentUser.uid;
+    const isOwn = this.currentUser && messageData.userId === this.currentUser.uid;
         
         const messageElement = document.createElement('div');
         messageElement.classList.add('message');
@@ -177,11 +195,15 @@ class FirebaseChat {
             timeString = timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }
         
+        // Support messages that may have `name` (from profile) or `displayName` (from earlier writes)
+        const authorName = isOwn ? 'You' : (messageData.displayName || messageData.name || 'Anonymous');
+        const authorInitials = messageData.initials || this.getInitials(authorName);
+
         messageElement.innerHTML = `
-            <div class="message-avatar">${messageData.initials || 'AN'}</div>
+            <div class="message-avatar">${authorInitials}</div>
             <div class="message-content">
                 <div class="message-header">
-                    <div class="message-author">${isOwn ? 'You' : (messageData.displayName || 'Anonymous')}</div>
+                    <div class="message-author">${authorName}</div>
                     <div class="message-time">${timeString}</div>
                 </div>
                 <div class="message-text">${this.escapeHtml(messageData.text)}</div>
