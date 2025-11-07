@@ -22,6 +22,11 @@
             animation: hueShift 20s infinite alternate;
         }
 
+        a {
+            text-decoration: none;
+            color: inherit; /* Inherits color from parent element */
+        }
+
         @keyframes hueShift {
             0% {
                 background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
@@ -792,26 +797,34 @@
 <body>
     <!-- Vertical Navigation Bar -->
     <div class="vertical-nav">
-        <div class="nav-item">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-            <span class="nav-tooltip">Home</span>
-        </div>
-        <div class="nav-item active">
-            <i class="fas fa-robot"></i>
-            <span>AI Companion</span>
-            <span class="nav-tooltip">AI Companion</span>
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-users"></i>
-            <span>Community</span>
-            <span class="nav-tooltip">Community</span>
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-user"></i>
-            <span>Profile</span>
-            <span class="nav-tooltip">Profile</span>
-        </div>
+        <a href="userdashboard.html">
+            <div class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+                <span class="nav-tooltip">Home</span>
+            </div>
+        </a>
+        <a href="aichatbot.html">
+            <div class="nav-item active">
+                <i class="fas fa-robot"></i>
+                <span>AI Companion</span>
+                <span class="nav-tooltip">AI Companion</span>
+            </div>
+        </a>
+        <a href="community_list.html">
+            <div class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Community</span>
+                <span class="nav-tooltip">Community</span>
+            </div>
+        </a>
+        <a href="profile.html">
+            <div class="nav-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+                <span class="nav-tooltip">Profile</span>
+            </div>
+        </a>
     </div>
 
     <!-- 3D Background Elements -->
