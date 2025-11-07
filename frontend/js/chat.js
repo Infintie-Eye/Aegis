@@ -57,16 +57,22 @@ class FirebaseChat {
             this.userDisplayName = userData.displayName || this.generateAnonymousName();
             this.userInitials = userData.initials || this.getInitials(this.userDisplayName);
         } else {
-            // Create new anonymous profile
-            this.userDisplayName = this.generateAnonymousName();
+            // Create a profile appropriate to the auth state.
+            const isAnon = !!this.currentUser.isAnonymous;
+            if (isAnon) {
+                this.userDisplayName = this.generateAnonymousName();
+            } else {
+                // Prefer the provider displayName, then email local part, then fallback anonymous name
+                this.userDisplayName = this.currentUser.displayName || (this.currentUser.email ? this.currentUser.email.split('@')[0] : this.generateAnonymousName());
+            }
             this.userInitials = this.getInitials(this.userDisplayName);
-            
+
             await setDoc(userRef, {
-                email: this.currentUser.email,
+                email: this.currentUser.email || null,
                 displayName: this.userDisplayName,
                 initials: this.userInitials,
                 createdAt: serverTimestamp(),
-                isAnonymous: true
+                isAnonymous: isAnon
             });
         }
     }

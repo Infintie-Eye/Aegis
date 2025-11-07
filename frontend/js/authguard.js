@@ -14,11 +14,18 @@ const isWaiting = path.endsWith("/pages/waiting.html") || path.endsWith("/waitin
 
 // Main guard
 onAuthStateChanged(auth, async (user) => {
+  console.debug('[authguard] path=', path, 'user=', user ? user.uid : null);
   // PUBLIC PAGES
   if (isPublic) {
     // If already logged in & verified, skip public pages
     if (user) {
       await user.reload();
+      console.debug('[authguard] public page check after reload:', {
+        uid: user.uid,
+        isAnonymous: user.isAnonymous,
+        emailVerified: user.emailVerified,
+        providers: user.providerData.map(p=>p.providerId)
+      });
       if (user.emailVerified) {
         window.location.replace("/pages/newdash.html");
       }
@@ -33,9 +40,22 @@ onAuthStateChanged(auth, async (user) => {
       return;
     }
     await user.reload();
-    if (user.emailVerified) {
-      window.location.replace("/pages/newdash.html");
+    console.debug('[authguard] waiting page check after reload:', {
+      uid: user.uid,
+      isAnonymous: user.isAnonymous,
+      emailVerified: user.emailVerified,
+      providers: user.providerData.map(p=>p.providerId)
+    });
+
+    // Only require email verification for password accounts. Social providers typically
+    // provide already-verified emails and should not be forced to waiting.
+    const hasPasswordProvider = user.providerData.some(p => p.providerId === 'password');
+    if (hasPasswordProvider && !user.emailVerified) {
+      // keep on waiting page
+      return;
     }
+    // otherwise proceed to app
+    window.location.replace("/pages/newdash.html");
     return; // allow waiting page for unverified users
   }
 
@@ -46,9 +66,18 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   await user.reload();
-  if (!user.emailVerified) {
+  console.debug('[authguard] protected page check after reload:', {
+    uid: user.uid,
+    isAnonymous: user.isAnonymous,
+    emailVerified: user.emailVerified,
+    providers: user.providerData.map(p=>p.providerId)
+  });
+
+  const hasPassword = user.providerData.some(p => p.providerId === 'password');
+  if (hasPassword && !user.emailVerified) {
     // Optional: sign out, then send to waiting
     // await signOut(auth);
+    console.info('[authguard] redirecting to waiting — password user not verified', user.uid);
     window.location.replace("/pages/waiting.html");
     return;
   }

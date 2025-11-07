@@ -34,6 +34,11 @@
             min-height: 100vh;
         }
 
+        a {
+            text-decoration: none;
+            color: inherit; /* Inherits color from parent element */
+        }
+
         .dashboard-container {
             display: flex;
             min-height: 100vh;
@@ -84,40 +89,6 @@
             top: 50%;
             transform: translateY(-50%);
             color: #aaa;
-        }
-
-        .notification-btn {
-            position: relative;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            cursor: pointer;
-            margin-right: 15px;
-        }
-
-        .notification-btn i {
-            color: var(--dark);
-            font-size: 18px;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: white;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         /* Dashboard Grid */
@@ -179,11 +150,6 @@
         .card-icon.accent {
             background: rgba(255, 101, 132, 0.1);
             color: var(--accent);
-        }
-
-        .card-icon.success {
-            background: rgba(76, 175, 80, 0.1);
-            color: var(--success);
         }
 
         .card-value {
@@ -404,6 +370,84 @@
             color: #777;
         }
 
+        /* Community Projects Section */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-header {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        .project-header.mindfulness {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .project-header.gardening {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .project-header.fitness {
+            background: linear-gradient(135deg, #f46b45 0%, #eea849 100%);
+        }
+
+        .project-body {
+            padding: 20px;
+        }
+
+        .project-body h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .project-body p {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .project-progress {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--primary);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .dashboard-grid {
@@ -415,6 +459,10 @@
             }
             
             .community-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -436,10 +484,6 @@
                     <div class="search-box">
                         <input type="text" placeholder="Search...">
                         <i class="fas fa-search"></i>
-                    </div>
-                    <div class="notification-btn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
                     </div>
                 </div>
             </div>
@@ -469,7 +513,8 @@
                 <div class="card">
                     <div class="card-header">
                         <div>
-                            <div class="card-value">24</div>
+                                <!-- Active sessions counter (updated from Firestore) -->
+                                <div class="card-value" id="activeSessionsCount">0</div>
                             <div class="card-description">Active Support Sessions</div>
                         </div>
                         <div class="card-icon secondary">
@@ -485,7 +530,7 @@
                     <div class="card-header">
                         <div>
                             <div class="card-value">12</div>
-                            <div class="card-description">Community Projects</div>
+                            <div class="card-description">Wellness Projects</div>
                         </div>
                         <div class="card-icon accent">
                             <i class="fas fa-project-diagram"></i>
@@ -495,19 +540,29 @@
                         <canvas id="projectsChart"></canvas>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Voice Analysis Section -->
+            <div class="feature-section">
+                <h3 class="section-title"><i class="fas fa-microphone"></i> Voice Analysis</h3>
                 
-                <div class="card">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-value">98%</div>
-                            <div class="card-description">Safety Guardian Accuracy</div>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <h3>Advanced Emotion Detection</h3>
+                            <p>Real-time analysis of emotional states</p>
                         </div>
-                        <div class="card-icon success">
-                            <i class="fas fa-shield-alt"></i>
+                        <div class="feature-body">
+                            <ul class="feature-list">
+                                <li><i class="fas fa-check-circle"></i> Real-time emotion detection</li>
+                                <li><i class="fas fa-check-circle"></i> Stress level monitoring</li>
+                                <li><i class="fas fa-check-circle"></i> Personalized interventions</li>
+                            </ul>
                         </div>
-                    </div>
-                    <div class="card-chart">
-                        <canvas id="safetyChart"></canvas>
+                        <div class="feature-footer">
+                            <span>Coming Soon</span>
+                            <button class="btn btn-outline">Learn More</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -540,7 +595,7 @@
                                 </div>
                             </div>
                             
-                            <button class="btn btn-primary" style="width: 100%;">Join Sanctuary</button>
+                            <button class="btn btn-primary" style="width: 100%;">Enter Sanctuary</button>
                         </div>
                     </div>
                     
@@ -567,7 +622,7 @@
                                 </div>
                             </div>
                             
-                            <button class="btn btn-primary" style="width: 100%;">Join Sanctuary</button>
+                            <button class="btn btn-primary" style="width: 100%;">Enter Sanctuary</button>
                         </div>
                     </div>
                     
@@ -594,45 +649,65 @@
                                 </div>
                             </div>
                             
-                            <button class="btn btn-primary" style="width: 100%;">Join Sanctuary</button>
+                            <button class="btn btn-primary" style="width: 100%;">Enter Sanctuary</button>
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Community Projects Section -->
+            <div class="feature-section">
+                <h3 class="section-title"><i class="fas fa-tasks"></i> Wellness Projects</h3>
                 
-                <div class="feature-grid">
-                    <div class="feature-card">
-                        <div class="feature-header" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                            <h3>Safe Spaces</h3>
-                            <p>Protected environments for open dialogue</p>
+                <div class="project-grid">
+                    <div class="project-card">
+                        <div class="project-header mindfulness">
+                            <i class="fas fa-brain"></i>
                         </div>
-                        <div class="feature-body">
-                            <ul class="feature-list">
-                                <li><i class="fas fa-check-circle"></i> Verified anonymity</li>
-                                <li><i class="fas fa-check-circle"></i> AI-Human moderation</li>
-                                <li><i class="fas fa-check-circle"></i> Themed sanctuaries</li>
-                            </ul>
-                        </div>
-                        <div class="feature-footer">
-                            <span>Active Now</span>
-                            <button class="btn btn-primary">Explore</button>
+                        <div class="project-body">
+                            <h3>Mindfulness Challenge</h3>
+                            <p>30-day mindfulness and meditation program</p>
+                            
+                            <div class="project-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%;"></div>
+                                </div>
+                                <span>75%</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="feature-card">
-                        <div class="feature-header" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                            <h3>Peer Support</h3>
-                            <p>Shared experiences & mutual understanding</p>
+                    <div class="project-card">
+                        <div class="project-header gardening">
+                            <i class="fas fa-seedling"></i>
                         </div>
-                        <div class="feature-body">
-                            <ul class="feature-list">
-                                <li><i class="fas fa-check-circle"></i> Community growth</li>
-                                <li><i class="fas fa-check-circle"></i> Collective resilience</li>
-                                <li><i class="fas fa-check-circle"></i> Support networks</li>
-                            </ul>
+                        <div class="project-body">
+                            <h3>Community Gardening</h3>
+                            <p>Therapeutic gardening project for mental wellness</p>
+                            
+                            <div class="project-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 60%;"></div>
+                                </div>
+                                <span>60%</span>
+                            </div>
                         </div>
-                        <div class="feature-footer">
-                            <span>Active Now</span>
-                            <button class="btn btn-primary">Connect</button>
+                    </div>
+                    
+                    <div class="project-card">
+                        <div class="project-header fitness">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <div class="project-body">
+                            <h3>Fitness Challenge</h3>
+                            <p>Physical activity program to boost mental health</p>
+                            
+                            <div class="project-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 90%;"></div>
+                                </div>
+                                <span>90%</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -828,55 +903,6 @@
                     plugins: {
                         legend: {
                             display: false
-                        }
-                    }
-                }
-            });
-            
-            // Safety Chart
-            const safetyCtx = document.getElementById('safetyChart').getContext('2d');
-            new Chart(safetyCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [{
-                        label: 'Safety Accuracy',
-                        data: [96, 97, 95, 98, 97, 99, 98],
-                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                        borderColor: 'rgba(76, 175, 80, 1)',
-                        borderWidth: 2,
-                        pointBackgroundColor: 'rgba(76, 175, 80, 1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: 90,
-                            max: 100,
-                            ticks: {
-                                display: false
-                            },
-                            grid: {
-                                display: false
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                display: false
-                            },
-                            grid: {
-                                display: false
-                            }
                         }
                     }
                 }

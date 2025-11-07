@@ -286,15 +286,31 @@ loginForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    showNotification("Login successful! Redirecting...", "success");
-    setTimeout(() => {
-      window.location.href = "/pages/userdashboard.html";
-    }, 1500);
-  } catch (err) {
-    showNotification(err.message, "error");
-  }
+    try {
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const user = cred.user;
+
+        // Ensure latest user state
+        await user.reload();
+
+        // Determine if this account uses password provider
+        const hasPassword = (user.providerData || []).some(p => p.providerId === 'password');
+
+        if (hasPassword && !user.emailVerified) {
+            showNotification('Email unverified. Please check your inbox or resend verification on the waiting page.', 'error');
+            // Send to waiting page where user can resend verification
+            setTimeout(() => window.location.href = '/pages/waiting.html', 1200);
+            return;
+        }
+
+        showNotification('Login successful! Redirecting...', 'success');
+        setTimeout(() => {
+            window.location.href = "/pages/userdashboard.html";
+        }, 800);
+
+    } catch (err) {
+        showNotification(err.message, "error");
+    }
 });
 </script>
 

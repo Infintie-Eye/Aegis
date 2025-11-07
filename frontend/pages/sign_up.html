@@ -448,22 +448,31 @@ signupForm.addEventListener('submit', async (e) => {
   if (password !== confirmPassword)
     return showNotification('Passwords do not match', 'error');
 
-  try {
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
+    try {
+        const signupBtn = document.querySelector('.signup-btn');
+        signupBtn.disabled = true;
+        signupBtn.textContent = 'Creating...';
 
-    await sendEmailVerification(user);
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCred.user;
 
-    showNotification('Verification email sent! Redirecting...', 'success');
+        // Send verification email. If user.emailVerified is already true for some reason,
+        // skip sending and proceed to dashboard.
+        await sendEmailVerification(user);
 
-    // 🔹 Redirect to waiting page
-    setTimeout(() => {
-      window.location.href = "/pages/waiting.html";
-    }, 2000);
+        showNotification('Verification email sent! Redirecting...', 'success');
 
-  } catch (err) {
-    showNotification('Signup failed: ' + err.message, 'error');
-  }
+        // Redirect to waiting page where they can resend/check verification
+        setTimeout(() => {
+            window.location.href = "/pages/waiting.html";
+        }, 1500);
+
+    } catch (err) {
+        showNotification('Signup failed: ' + err.message, 'error');
+        const signupBtn = document.querySelector('.signup-btn');
+        signupBtn.disabled = false;
+        signupBtn.textContent = 'Sign Up';
+    }
 });
 </script>
 

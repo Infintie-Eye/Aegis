@@ -191,6 +191,22 @@
             gap: 15px;
             position: relative;
         }
+            /* Make chat container a column so messages can scroll inside it only */
+            .chat-box {
+                display: flex;
+                flex-direction: column;
+                max-height: calc(100vh - 260px);
+                overflow: hidden;
+            }
+
+            .chat-messages {
+                flex: 1 1 auto;
+                overflow-y: auto;
+                padding: 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
 
         .message {
             display: flex;
@@ -647,25 +663,23 @@
                     import('../js/firebase.js')
                 ]);
 
-                const { auth, signInAnonymously } = firebaseModule;
+                const { auth, onAuthStateChanged } = firebaseModule;
 
-                if (!auth.currentUser) {
-                    try {
-                        await signInAnonymously(auth);
-                        console.log('Signed in anonymously for chat (relationship)');
-                    } catch (err) {
-                        console.warn('Anonymous sign-in failed or already signed in:', err);
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user || user.isAnonymous) {
+                        window.location.replace('/pages/login.html');
+                        return;
                     }
-                }
 
-                const chatMessages = document.getElementById('chatMessages');
-                const messageInput = document.getElementById('messageInput');
-                const sendButton = document.getElementById('sendButton');
+                    const chatMessages = document.getElementById('chatMessages');
+                    const messageInput = document.getElementById('messageInput');
+                    const sendButton = document.getElementById('sendButton');
 
-                if (chatMessages && messageInput && sendButton) {
-                    const chat = new FirebaseChat('relationship', chatMessages, messageInput, sendButton);
-                    window.relationshipChat = chat;
-                }
+                    if (chatMessages && messageInput && sendButton) {
+                        const chat = new FirebaseChat('relationship', chatMessages, messageInput, sendButton);
+                        window.relationshipChat = chat;
+                    }
+                });
             } catch (error) {
                 console.error('Failed to initialize Firebase chat on relationship page:', error);
             }

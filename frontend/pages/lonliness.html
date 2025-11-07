@@ -194,6 +194,8 @@
             flex-direction: column;
             overflow: hidden;
             backdrop-filter: blur(10px);
+            /* constrain to viewport so messages-area can scroll internally */
+            max-height: calc(100vh - 240px);
         }
 
         .chat-header {
@@ -762,25 +764,23 @@
                     import('../js/firebase.js')
                 ]);
 
-                const { auth, signInAnonymously } = firebaseModule;
+                const { auth, onAuthStateChanged } = firebaseModule;
 
-                if (!auth.currentUser) {
-                    try {
-                        await signInAnonymously(auth);
-                        console.log('Signed in anonymously for chat (loneliness)');
-                    } catch (err) {
-                        console.warn('Anonymous sign-in failed or already signed in:', err);
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user || user.isAnonymous) {
+                        window.location.replace('/pages/login.html');
+                        return;
                     }
-                }
 
-                const messagesArea = document.getElementById('messagesArea');
-                const messageInput = document.getElementById('messageInput');
-                const sendButton = document.getElementById('sendButton');
+                    const messagesArea = document.getElementById('messagesArea');
+                    const messageInput = document.getElementById('messageInput');
+                    const sendButton = document.getElementById('sendButton');
 
-                if (messagesArea && messageInput && sendButton) {
-                    const chat = new FirebaseChat('loneliness', messagesArea, messageInput, sendButton);
-                    window.lonelinessChat = chat;
-                }
+                    if (messagesArea && messageInput && sendButton) {
+                        const chat = new FirebaseChat('loneliness', messagesArea, messageInput, sendButton);
+                        window.lonelinessChat = chat;
+                    }
+                });
             } catch (error) {
                 console.error('Failed to initialize Firebase chat on loneliness page:', error);
             }
