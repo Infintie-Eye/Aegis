@@ -268,45 +268,71 @@
         }
 
         .message-content {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            max-width: 70%;
+            position: relative;
             flex: 1;
         }
 
-        .message-header {
+        /* Message header: name and time on one line */
+        .message-content .message-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 5px;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
+        .message-content .message-username,
         .message-username {
+            font-size: 0.85rem;
             font-weight: 600;
             color: var(--dark-color);
-            margin-right: 10px;
+            margin: 0;
         }
 
+        .message-content .message-time,
         .message-time {
-            font-size: 0.8rem;
-            color: #777;
+            font-size: 0.75rem;
+            color: #888;
+            opacity: 0.95;
+            white-space: nowrap;
+            margin: 0;
         }
 
         .message-text {
-            background: var(--message-bg);
-            padding: 12px 15px;
-            border-radius: 18px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            position: relative;
+            color: var(--text-color);
+            line-height: 1.5;
+            font-size: 1rem;
+            margin-top: 4px;
         }
 
-        .message-text::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: -8px;
-            width: 15px;
-            height: 15px;
-            background: var(--message-bg);
-            transform: rotate(45deg);
-            box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.05);
+        .message.own {
+            align-self: flex-end;
+            flex-direction: row-reverse;
         }
+
+        .message.own .message-content {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+        }
+
+        .message.own .message-username {
+            color: white;
+        }
+
+        .message.own .message-text {
+            color: white;
+        }
+
+        .message.own .message-time {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* removed inner-bubble tail; the message container (.message-content) provides the bubble background */
 
         /* Input Area */
         .input-area {
@@ -620,7 +646,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Sample user data
+            // Sample user data (kept for the users sidebar)
             const users = [
                 { id: 1, name: 'BlueSky', status: 'Online', activity: 'Just joined' },
                 { id: 2, name: 'StarGazer', status: 'Online', activity: 'Active now' },
@@ -630,16 +656,6 @@
                 { id: 6, name: 'NightOwl', status: 'Online', activity: 'Active now' },
                 { id: 7, name: 'RiverStone', status: 'Online', activity: 'Active now' },
                 { id: 8, name: 'ForestPath', status: 'Online', activity: 'Just joined' }
-            ];
-
-            // Sample messages
-            const initialMessages = [
-                { userId: 2, text: 'Hey everyone, hope you\'re all doing okay today.', time: '10:30 AM' },
-                { userId: 5, text: 'Just wanted to say this community has been a real help for me. Feeling less alone already.', time: '10:32 AM' },
-                { userId: 1, text: 'Same here! It\'s comforting to know others understand what it feels like.', time: '10:35 AM' },
-                { userId: 3, text: 'Does anyone want to talk about how they\'re feeling today? I could use a chat.', time: '10:40 AM' },
-                { userId: 7, text: 'I\'m feeling a bit down today. The weather isn\'t helping either.', time: '10:42 AM' },
-                { userId: 4, text: 'I hear you. Sometimes the smallest things can affect our mood. What usually helps you feel better?', time: '10:45 AM' }
             ];
 
             // Generate avatar initials
@@ -664,7 +680,7 @@
             function populateUsersList() {
                 const usersList = document.getElementById('usersList');
                 usersList.innerHTML = '';
-                
+
                 users.forEach(user => {
                     const userItem = document.createElement('div');
                     userItem.className = 'user-item';
@@ -682,163 +698,50 @@
                 });
             }
 
-            // Populate messages
-            function populateMessages() {
-                const messagesArea = document.getElementById('messagesArea');
-                messagesArea.innerHTML = '';
-                
-                initialMessages.forEach(message => {
-                    const user = users.find(u => u.id === message.userId);
-                    if (user) {
-                        const messageElement = document.createElement('div');
-                        messageElement.className = 'message';
-                        messageElement.innerHTML = `
-                            <div class="message-avatar" style="background: ${getRandomColor()}">
-                                ${getInitials(user.name)}
-                            </div>
-                            <div class="message-content">
-                                <div class="message-header">
-                                    <div class="message-username">${user.name}</div>
-                                    <div class="message-time">${message.time}</div>
-                                </div>
-                                <div class="message-text">${message.text}</div>
-                            </div>
-                        `;
-                        messagesArea.appendChild(messageElement);
-                    }
-                });
-                
-                // Scroll to bottom
-                messagesArea.scrollTop = messagesArea.scrollHeight;
-            }
-
-            // Send message function
-            function sendMessage() {
-                const messageInput = document.getElementById('messageInput');
-                const messageText = messageInput.value.trim();
-                
-                if (messageText) {
-                    // Add message to chat
-                    const messagesArea = document.getElementById('messagesArea');
-                    const messageElement = document.createElement('div');
-                    messageElement.className = 'message';
-                    messageElement.innerHTML = `
-                        <div class="message-avatar" style="background: ${getRandomColor()}">
-                            ${getInitials('You')}
-                        </div>
-                        <div class="message-content">
-                            <div class="message-header">
-                                <div class="message-username">You</div>
-                                <div class="message-time">Just now</div>
-                            </div>
-                            <div class="message-text">${messageText}</div>
-                        </div>
-                    `;
-                    messagesArea.appendChild(messageElement);
-                    
-                    // Clear input
-                    messageInput.value = '';
-                    
-                    // Scroll to bottom
-                    messagesArea.scrollTop = messagesArea.scrollHeight;
-                    
-                    // Simulate response after a delay
-                    setTimeout(() => {
-                        simulateResponse();
-                    }, 1000 + Math.random() * 3000);
-                }
-            }
-
-            // Simulate response from another user
-            function simulateResponse() {
-                const responses = [
-                    "I understand how you feel. Thanks for sharing that.",
-                    "That's really insightful. I've had similar experiences.",
-                    "You're not alone in feeling this way. I'm here for you.",
-                    "That sounds really tough. How are you coping with it?",
-                    "I appreciate you opening up about this. It takes courage.",
-                    "Have you tried any strategies that help when you feel this way?",
-                    "Your words resonate with me. Thank you for sharing.",
-                    "I'm here to listen if you want to talk more about it."
-                ];
-                
-                const randomUser = users[Math.floor(Math.random() * users.length)];
-                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                
-                const messagesArea = document.getElementById('messagesArea');
-                const messageElement = document.createElement('div');
-                messageElement.className = 'message';
-                messageElement.innerHTML = `
-                    <div class="message-avatar" style="background: ${getRandomColor()}">
-                        ${getInitials(randomUser.name)}
-                    </div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <div class="message-username">${randomUser.name}</div>
-                            <div class="message-time">Just now</div>
-                        </div>
-                        <div class="message-text">${randomResponse}</div>
-                    </div>
-                `;
-                messagesArea.appendChild(messageElement);
-                
-                // Scroll to bottom
-                messagesArea.scrollTop = messagesArea.scrollHeight;
-            }
-
             // Interactive elements that follow cursor
             document.addEventListener('mousemove', function(e) {
                 if (Math.random() > 0.95) {
                     createInteractiveElement(e.clientX, e.clientY);
                 }
             });
-            
+
             function createInteractiveElement(x, y) {
                 const element = document.createElement('div');
                 element.classList.add('interactive-element');
-                
+
                 const size = Math.random() * 20 + 5;
                 element.style.width = `${size}px`;
                 element.style.height = `${size}px`;
                 element.style.left = `${x - size/2}px`;
                 element.style.top = `${y - size/2}px`;
-                
+
                 document.body.appendChild(element);
-                
+
                 // Animate the element
                 setTimeout(() => {
                     element.style.transform = `scale(${Math.random() * 5 + 2})`;
                     element.style.opacity = '0';
                 }, 10);
-                
+
                 // Remove the element after animation
                 setTimeout(() => {
                     element.remove();
                 }, 1000);
             }
 
-            // Event listeners
-            document.getElementById('sendButton').addEventListener('click', sendMessage);
-            
-            document.getElementById('messageInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    sendMessage();
-                }
-            });
-
             // Navbar interaction
             const navItems = document.querySelectorAll('.nav-item');
-            
+
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
                     // Remove active class from all items
                     navItems.forEach(navItem => {
                         navItem.classList.remove('active');
                     });
-                    
+
                     // Add active class to clicked item
                     this.classList.add('active');
-                    
+
                     // Get the navigation text
                     const navText = this.querySelector('span').textContent;
                     console.log(`Navigating to ${navText}`);
@@ -847,8 +750,41 @@
 
             // Initialize the page
             populateUsersList();
-            populateMessages();
         });
+    </script>
+
+    <!-- Firebase chat initializer (module) -->
+    <script type="module">
+        (async function() {
+            try {
+                const [{ default: FirebaseChat }, firebaseModule] = await Promise.all([
+                    import('../js/chat.js'),
+                    import('../js/firebase.js')
+                ]);
+
+                const { auth, signInAnonymously } = firebaseModule;
+
+                if (!auth.currentUser) {
+                    try {
+                        await signInAnonymously(auth);
+                        console.log('Signed in anonymously for chat (loneliness)');
+                    } catch (err) {
+                        console.warn('Anonymous sign-in failed or already signed in:', err);
+                    }
+                }
+
+                const messagesArea = document.getElementById('messagesArea');
+                const messageInput = document.getElementById('messageInput');
+                const sendButton = document.getElementById('sendButton');
+
+                if (messagesArea && messageInput && sendButton) {
+                    const chat = new FirebaseChat('loneliness', messagesArea, messageInput, sendButton);
+                    window.lonelinessChat = chat;
+                }
+            } catch (error) {
+                console.error('Failed to initialize Firebase chat on loneliness page:', error);
+            }
+        })();
     </script>
 </body>
 </html>

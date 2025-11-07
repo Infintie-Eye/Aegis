@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MindfulSpace - Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
     <style>
         :root {
             --primary-color: #6a5acd;
@@ -45,81 +46,11 @@
             min-height: 100vh;
         }
 
-        /* Vertical Navigation */
-        .vertical-nav {
-            width: 80px;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 30px;
-            position: fixed;
-            height: 100vh;
-            z-index: 1000;
-            transition: var(--transition);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 30px;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            width: 60px;
-            height: 60px;
-            border-radius: 15px;
-            justify-content: center;
-        }
-
-        .nav-item:hover {
-            background-color: rgba(106, 90, 205, 0.1);
-            transform: translateX(5px);
-        }
-
-        .nav-item.active {
-            background-color: rgba(106, 90, 205, 0.2);
-            color: var(--primary-color);
-        }
-
-        .nav-item i {
-            font-size: 24px;
-            color: var(--primary-color);
-            transition: var(--transition);
-        }
-
-        .nav-item:hover i {
-            color: var(--accent-color);
-        }
-
-        .nav-item.active i {
-            color: var(--primary-color);
-        }
-
-        .nav-tooltip {
-            position: absolute;
-            left: 70px;
-            background-color: var(--dark-color);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .nav-item:hover .nav-tooltip {
-            opacity: 1;
-        }
+        /* Sidebar handled by sidebar.css */
 
         /* Main Content */
         .main-content {
-            margin-left: 80px;
+            margin-left: 260px;
             padding: 30px;
             flex: 1;
             display: flex;
@@ -629,25 +560,8 @@
 </head>
 <body>
     <div class="container">
-        <!-- Vertical Navigation -->
-        <nav class="vertical-nav">
-            <div class="nav-item" data-page="home">
-                <i class="fas fa-home"></i>
-                <span class="nav-tooltip">Home</span>
-            </div>
-            <div class="nav-item" data-page="ai">
-                <i class="fas fa-robot"></i>
-                <span class="nav-tooltip">AI Companion</span>
-            </div>
-            <div class="nav-item" data-page="community">
-                <i class="fas fa-users"></i>
-                <span class="nav-tooltip">Community</span>
-            </div>
-            <div class="nav-item active" data-page="profile">
-                <i class="fas fa-user"></i>
-                <span class="nav-tooltip">Profile</span>
-            </div>
-        </nav>
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -915,5 +829,6 @@
         `;
         document.head.appendChild(style);
     </script>
+    <script src="../js/sidebar.js"></script>
 </body>
 </html>
