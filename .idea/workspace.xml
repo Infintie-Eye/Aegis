@@ -5,62 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed2e32e6-939e-4df4-af29-15ab3962b7dd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/css/navbar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/js/navbar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/pages/academic.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/pages/anxiety.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/pages/depression.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/pages/lonliness.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/pages/navbar.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/pages/relationship.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/pages/sign in.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/pages/waiting.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/pages/work.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/agents/base_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/agents/base_agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/agents/cbt_therapist_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/agents/cbt_therapist_agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/agents/crisis_detection_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/agents/crisis_detection_agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/agents/emotional_support_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/agents/emotional_support_agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/agents/mindfulness_coach_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/agents/mindfulness_coach_agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/agents/progress_tracker_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/agents/progress_tracker_agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/config/agent_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/config/agent_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/config/crew_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/config/crew_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/config/task_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/config/task_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/crews/crisis_assessment_crew.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/crews/crisis_assessment_crew.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/crews/intervention_crew.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/crews/intervention_crew.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/crews/mental_support_crew.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/crews/mental_support_crew.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/crews/progress_review_crew.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/crews/progress_review_crew.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/main_orchestrator.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/main_orchestrator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/memory/conversation_memory.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/memory/conversation_memory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/memory/emotional_memory.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/memory/emotional_memory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/memory/session_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/memory/session_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/memory/user_preferences.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/memory/user_preferences.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/models/conversation_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/models/conversation_state.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/models/emotional_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/models/emotional_state.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/models/intervention_plan.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/models/intervention_plan.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/models/user_context.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/models/user_context.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/tasks/base_task.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/tasks/base_task.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/tasks/cbt_intervention_tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/tasks/cbt_intervention_tasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/tasks/crisis_assessment_tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/tasks/crisis_assessment_tasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/tasks/emotional_support_tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/tasks/emotional_support_tasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/tasks/mindfulness_tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/tasks/mindfulness_tasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/tasks/progress_analysis_tasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/tasks/progress_analysis_tasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/tools/assessment_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/tools/assessment_tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/tools/emotional_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/tools/emotional_tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/tools/therapeutic_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/tools/therapeutic_tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/tools/utility_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/tools/utility_tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/utils/emotion_detector.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/utils/emotion_detector.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/utils/prompt_templates.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/utils/prompt_templates.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/utils/response_formatter.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/utils/response_formatter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/utils/safety_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/utils/safety_checker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ai_chatbot/utils/sentiment_analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ai_chatbot/utils/sentiment_analyzer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/pages/analysis.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pages/analysis.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/pages/community_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pages/community_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/pages/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pages/newdash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/pages/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pages/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/pages/sign_up.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/pages/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +30,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultAutoModeForALLUsers.v1": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "Merging moulik",
+    "git-widget-placeholder": "ansh",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "C:/Users/DELL/Desktop/Aegis",
     "node.js.detected.package.eslint": "true",
@@ -97,6 +42,30 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="Aegis" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -113,6 +82,8 @@
       <updated>1762430546968</updated>
       <workItem from="1762430548440" duration="676000" />
       <workItem from="1762453341010" duration="1297000" />
+      <workItem from="1762500884762" duration="99000" />
+      <workItem from="1762501007966" duration="128000" />
     </task>
     <servers />
   </component>
