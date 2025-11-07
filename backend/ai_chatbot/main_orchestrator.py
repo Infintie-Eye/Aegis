@@ -11,7 +11,7 @@ from .memory.emotional_memory import EmotionalMemory
 from .memory.user_preferences import UserPreferences
 from .models.user_context import UserContext
 from .utils.safety_checker import SafetyChecker
-from .utils.emotional_detector import EmotionalDetector
+from .utils.emotion_detector import EmotionalDetector
 from .utils.wellness_recommender import WellnessRecommender
 from .utils.mental_state_monitor import MentalStateMonitor
 from .utils.community_matcher import CommunityMatcher
