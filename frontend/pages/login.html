@@ -299,13 +299,13 @@ loginForm.addEventListener("submit", async (e) => {
         if (hasPassword && !user.emailVerified) {
             showNotification('Email unverified. Please check your inbox or resend verification on the waiting page.', 'error');
             // Send to waiting page where user can resend verification
-            setTimeout(() => window.location.href = '/pages/waiting.html', 1200);
+            setTimeout(() => window.location.href = 'waiting.html', 1200);
             return;
         }
 
         showNotification('Login successful! Redirecting...', 'success');
         setTimeout(() => {
-            window.location.href = "/pages/userdashboard.html";
+            window.location.href = "userdashboard.html";
         }, 800);
 
     } catch (err) {

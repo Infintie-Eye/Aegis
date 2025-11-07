@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegis - Final Integration Steps</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            color: #856404;
+        }
+
+        ul {
+            line-height: 2;
+        }
+
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .badge-warning {
+            background: #ffc107;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🚀 Aegis - Final Integration Steps</h1>
+
+    <p>Welcome to Aegis! You're almost ready to use the complete mental wellness platform. Follow these final steps to
+        connect everything together.</p>
+
+    <div class="success">
+        <strong>✅ What's Already Complete:</strong>
+        <ul>
+            <li><span class="badge badge-success">Complete</span> Backend Flask API with all routes</li>
+            <li><span class="badge badge-success">Complete</span> AI Chatbot with CrewAI and Gemini API</li>
+            <li><span class="badge badge-success">Complete</span> Frontend pages and components</li>
+            <li><span class="badge badge-success">Complete</span> Firebase authentication and chatrooms</li>
+            <li><span class="badge badge-success">Complete</span> Analysis and mood tracking features</li>
+        </ul>
+    </div>
+
+    <h2>📝 Step 1: Add AI Chatbot Script to Frontend</h2>
+
+    <div class="step">
+        <strong>File to modify:</strong> <code>frontend/pages/aichatbot.html</code>
+
+        <p>Find the line near the bottom of the file (around line 1061):</p>
+
+        <div class="code-block">
+            &lt;script src="../js/sidebar.js"&gt;&lt;/script&gt;
+            &lt;/body&gt;
+            &lt;/html&gt;
+        </div>
+
+        <p>Replace it with:</p>
+
+        <div class="code-block">
+            &lt;script src="../js/ai-chatbot.js"&gt;&lt;/script&gt;
+            &lt;script src="../js/sidebar.js"&gt;&lt;/script&gt;
+            &lt;/body&gt;
+            &lt;/html&gt;
+        </div>
+
+        <p><span class="badge badge-info">Info</span> This connects the AI chatbot frontend to the backend API.</p>
+    </div>
+
+    <h2>🔑 Step 2: Verify Environment Variables</h2>
+
+    <div class="step">
+        <strong>Check these files exist with correct API keys:</strong>
+
+        <h3>backend/.env</h3>
+        <div class="code-block">
+            GOOGLE_API_KEY=AIzaSyDq8ch3npPUVVIUWm0FgU8Sjx7uKs2CbjA
+            GEMINI_API_KEY=AIzaSyDq8ch3npPUVVIUWm0FgU8Sjx7uKs2CbjA
+            FLASK_ENV=development
+            PORT=5000
+        </div>
+
+        <h3>backend/ai_chatbot/.env</h3>
+        <div class="code-block">
+            GEMINI_API_KEY="AIzaSyDq8ch3npPUVVIUWm0FgU8Sjx7uKs2CbjA"
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Security Note:</strong> These API keys are for development only. In production, use your own API
+            keys and keep them secure!
+        </div>
+    </div>
+
+    <h2>🏃 Step 3: Start the Servers</h2>
+
+    <div class="step">
+        <h3>Option 1: Using Batch Files (Windows)</h3>
+        <ol>
+            <li>Double-click <code>start_backend.bat</code></li>
+            <li>Wait for "Starting Aegis Mental Wellness API on 0.0.0.0:5000"</li>
+            <li>Double-click <code>start_frontend.bat</code> in a new window</li>
+            <li>Wait for "Serving HTTP on 0.0.0.0 port 8000"</li>
+        </ol>
+
+        <h3>Option 2: Manual (All Platforms)</h3>
+        <p><strong>Terminal 1 - Backend:</strong></p>
+        <div class="code-block">
+            cd backend
+            # Activate virtual environment first
+            python app.py
+        </div>
+
+        <p><strong>Terminal 2 - Frontend:</strong></p>
+        <div class="code-block">
+            cd frontend
+            python -m http.server 8000
+        </div>
+    </div>
+
+    <h2>✅ Step 4: Test the Integration</h2>
+
+    <div class="step">
+        <h3>1. Open Your Browser</h3>
+        <p>Navigate to: <a href="http://localhost:8000" target="_blank">http://localhost:8000</a></p>
+
+        <h3>2. Test AI Chatbot</h3>
+        <ol>
+            <li>Go to: <a href="http://localhost:8000/pages/aichatbot.html" target="_blank">http://localhost:8000/pages/aichatbot.html</a>
+            </li>
+            <li>Type: "I've been feeling stressed lately"</li>
+            <li>You should receive an AI-powered response with wellness suggestions</li>
+        </ol>
+
+        <h3>3. Test Chatrooms</h3>
+        <ol>
+            <li>Go to: <a href="http://localhost:8000/pages/community_list.html" target="_blank">http://localhost:8000/pages/community_list.html</a>
+            </li>
+            <li>Click on any chatroom (e.g., "Anxiety Support")</li>
+            <li>Send a message - it should appear in real-time</li>
+        </ol>
+
+        <h3>4. Test Analysis</h3>
+        <ol>
+            <li>Go to: <a href="http://localhost:8000/pages/analysis.html" target="_blank">http://localhost:8000/pages/analysis.html</a>
+            </li>
+            <li>Complete the personality analysis</li>
+            <li>View your results</li>
+        </ol>
+
+        <h3>5. Verify Backend API</h3>
+        <p>Visit: <a href="http://localhost:5000/health" target="_blank">http://localhost:5000/health</a></p>
+        <p>You should see a JSON response confirming the API is healthy.</p>
+    </div>
+
+    <h2>🎯 All Features Connected</h2>
+
+    <div class="success">
+        <h3>Frontend Pages → Backend Routes:</h3>
+        <ul>
+            <li><strong>AI Chatbot</strong> (aichatbot.html) → <code>/api/chat/*</code></li>
+            <li><strong>Chatrooms</strong> (depression.html, anxiety.html, etc.) → Firebase Firestore</li>
+            <li><strong>Analysis</strong> (analysis.html) → <code>/api/analysis/*</code></li>
+            <li><strong>Profile</strong> (profile.html) → Firebase Auth + Firestore</li>
+            <li><strong>Dashboard</strong> (userdashboard.html) → Firebase Auth</li>
+        </ul>
+    </div>
+
+    <h2>📚 Documentation</h2>
+
+    <div class="step">
+        <ul>
+            <li><strong><a href="QUICKSTART.md">QUICKSTART.md</a></strong> - Get started in 5 minutes</li>
+            <li><strong><a href="INTEGRATION_GUIDE.md">INTEGRATION_GUIDE.md</a></strong> - Complete integration guide
+            </li>
+            <li><strong><a href="README.md">README.md</a></strong> - Project overview and features</li>
+            <li><strong><a href="backend/ai_chatbot/README.md">AI Chatbot README</a></strong> - Technical details</li>
+        </ul>
+    </div>
+
+    <h2>🐛 Troubleshooting</h2>
+
+    <div class="step">
+        <h3>Backend won't start:</h3>
+        <p>Run: <code>cd backend && pip install -r requirements.txt</code></p>
+
+        <h3>AI Chatbot not responding:</h3>
+        <p>Verify <code>backend/.env</code> has correct <code>GOOGLE_API_KEY</code></p>
+
+        <h3>CORS errors:</h3>
+        <p>Ensure backend is running on port 5000 and <code>flask-cors</code> is installed</p>
+
+        <h3>Firebase not working:</h3>
+        <p>Check <code>frontend/js/firebase.js</code> has correct configuration</p>
+    </div>
+
+    <h2>🎉 You're All Set!</h2>
+
+    <div class="success">
+        <p><strong>Congratulations!</strong> Your Aegis Mental Wellness Platform is fully integrated and ready to use.
+        </p>
+
+        <p>Key URLs:</p>
+        <ul>
+            <li>Frontend: <a href="http://localhost:8000">http://localhost:8000</a></li>
+            <li>AI Chatbot: <a href="http://localhost:8000/pages/aichatbot.html">http://localhost:8000/pages/aichatbot.html</a>
+            </li>
+            <li>Backend API: <a href="http://localhost:5000">http://localhost:5000</a></li>
+            <li>API Health: <a href="http://localhost:5000/health">http://localhost:5000/health</a></li>
+        </ul>
+
+        <p><strong>Start building mental wellness with Aegis! 🌟</strong></p>
+    </div>
+
+    <hr style="margin: 40px 0; border: 1px solid #ddd;">
+
+    <p style="text-align: center; color: #666;">
+        <strong>Aegis - Bridging AI Empathy with Human Connection</strong><br>
+        Built with ❤️ by Team Aegis<br>
+        <a href="mailto:team@aegis.com">team@aegis.com</a>
+    </p>
+</div>
+</body>
+</html>
